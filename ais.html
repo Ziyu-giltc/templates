@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NexusAI - 全能AI聚合平台</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FDF8F4;
+      --bg-alt: #FAF5F0;
+      --fg: #1A1612;
+      --fg-muted: #6B5E54;
+      --accent: #E07A5F;
+      --accent-hover: #C96A52;
+      --card: #FFFFFF;
+      --border: #E8E0D8;
+      --success: #4A9D7C;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    body {
+      font-family: 'Noto Sans SC', 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+    }
+
+    .font-display {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* Focus styles for accessibility */
+    *:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(2deg); }
+    }
+
+    @keyframes pulse-soft {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.7; }
+    }
+
+    @keyframes gradient-shift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .animate-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stagger-1 { transition-delay: 0.1s; }
+    .stagger-2 { transition-delay: 0.2s; }
+    .stagger-3 { transition-delay: 0.3s; }
+    .stagger-4 { transition-delay: 0.4s; }
+
+    /* Hero background elements */
+    .hero-bg-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      animation: pulse-soft 8s ease-in-out infinite;
+    }
+
+    .hero-bg-blob-1 {
+      width: 400px;
+      height: 400px;
+      background: linear-gradient(135deg, rgba(224, 122, 95, 0.3), rgba(224, 122, 95, 0.1));
+      top: -100px;
+      right: -100px;
+      animation-delay: 0s;
+    }
+
+    .hero-bg-blob-2 {
+      width: 300px;
+      height: 300px;
+      background: linear-gradient(135deg, rgba(74, 157, 124, 0.2), rgba(74, 157, 124, 0.05));
+      bottom: 0;
+      left: -50px;
+      animation-delay: 2s;
+    }
+
+    .hero-bg-blob-3 {
+      width: 200px;
+      height: 200px;
+      background: linear-gradient(135deg, rgba(224, 122, 95, 0.2), rgba(224, 122, 95, 0.05));
+      top: 50%;
+      left: 30%;
+      animation-delay: 4s;
+    }
+
+    /* Card hover effects */
+    .feature-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(26, 22, 18, 0.08);
+    }
+
+    /* Button styles */
+    .btn-primary {
+      background-color: var(--accent);
+      color: white;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--fg);
+      border: 1.5px solid var(--border);
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--fg);
+      background-color: rgba(26, 22, 18, 0.03);
+    }
+
+    /* FAQ accordion */
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .faq-button {
+      width: 100%;
+      text-align: left;
+      padding: 1.25rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .faq-button:hover {
+      color: var(--accent);
+    }
+
+    .faq-icon {
+      transition: transform 0.3s ease;
+    }
+
+    .faq-item.open .faq-icon {
+      transform: rotate(180deg);
+    }
+
+    .faq-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+
+    .faq-item.open .faq-content {
+      max-height: 200px;
+      padding-bottom: 1.25rem;
+    }
+
+    /* Pricing card */
+    .pricing-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .pricing-card:hover {
+      transform: scale(1.02);
+    }
+
+    .pricing-card.featured {
+      border: 2px solid var(--accent);
+      position: relative;
+    }
+
+    /* Mobile menu */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 80%;
+      max-width: 320px;
+      height: 100vh;
+      background: var(--card);
+      z-index: 100;
+      transition: right 0.3s ease;
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .mobile-menu.open {
+      right: 0;
+    }
+
+    .mobile-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: rgba(26, 22, 18, 0.5);
+      z-index: 99;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .mobile-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Testimonial card */
+    .testimonial-card {
+      transition: transform 0.3s ease;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Scroll indicator */
+    .scroll-indicator {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    /* Partner logo grayscale */
+    .partner-logo {
+      filter: grayscale(100%);
+      opacity: 0.5;
+      transition: all 0.3s ease;
+    }
+
+    .partner-logo:hover {
+      filter: grayscale(0%);
+      opacity: 1;
+    }
+
+    /* Gradient text */
+    .gradient-text {
+      background: linear-gradient(135deg, var(--accent), #C96A52, var(--success));
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradient-shift 5s ease infinite;
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip to main content for accessibility -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-white focus:rounded-lg focus:shadow-lg">
+    跳转到主要内容
+  </a>
+
+  <!-- Navigation -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-[var(--bg)]/80 backdrop-blur-md border-b border-[var(--border)]">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" role="navigation" aria-label="主导航">
+      <div class="flex items-center justify-between h-16 md:h-20">
+        <!-- Logo -->
+        <a href="#" class="flex items-center gap-2 font-display font-bold text-xl" aria-label="NexusAI 首页">
+          <div class="w-8 h-8 rounded-lg bg-[var(--accent)] flex items-center justify-center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <span>NexusAI</span>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#features" class="text-sm font-medium text-[var(--fg-muted)] hover:text-[var(--fg)] transition-colors">功能</a>
+          <a href="#pricing" class="text-sm font-medium text-[var(--fg-muted)] hover:text-[var(--fg)] transition-colors">定价</a>
+          <a href="#testimonials" class="text-sm font-medium text-[var(--fg-muted)] hover:text-[var(--fg)] transition-colors">用户评价</a>
+          <a href="#faq" class="text-sm font-medium text-[var(--fg-muted)] hover:text-[var(--fg)] transition-colors">常见问题</a>
+        </div>
+
+        <!-- Desktop CTA -->
+        <div class="hidden md:flex items-center gap-3">
+          <button class="btn-secondary px-4 py-2 rounded-full text-sm font-medium">登录</button>
+          <button class="btn-primary px-5 py-2 rounded-full text-sm font-medium">免费试用</button>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button 
+          class="md:hidden p-2 rounded-lg hover:bg-[var(--border)]/50 transition-colors"
+          aria-label="打开菜单"
+          aria-expanded="false"
+          id="menu-toggle"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-overlay" id="mobile-overlay" aria-hidden="true"></div>
+  
+  <!-- Mobile Menu -->
+  <aside class="mobile-menu" id="mobile-menu" role="dialog" aria-label="移动端导航菜单" aria-hidden="true">
+    <div class="p-6">
+      <div class="flex justify-between items-center mb-8">
+        <span class="font-display font-bold text-lg">菜单</span>
+        <button class="p-2 rounded-lg hover:bg-[var(--border)]/50 transition-colors" id="menu-close" aria-label="关闭菜单">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <nav class="flex flex-col gap-4">
+        <a href="#features" class="text-lg font-medium py-2 border-b border-[var(--border)]">功能</a>
+        <a href="#pricing" class="text-lg font-medium py-2 border-b border-[var(--border)]">定价</a>
+        <a href="#testimonials" class="text-lg font-medium py-2 border-b border-[var(--border)]">用户评价</a>
+        <a href="#faq" class="text-lg font-medium py-2 border-b border-[var(--border)]">常见问题</a>
+      </nav>
+      <div class="mt-8 flex flex-col gap-3">
+        <button class="btn-secondary w-full py-3 rounded-full font-medium">登录</button>
+        <button class="btn-primary w-full py-3 rounded-full font-medium">免费试用</button>
+      </div>
+    </div>
+  </aside>
+
+  <main id="main-content">
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center pt-20 overflow-hidden">
+      <!-- Background blobs -->
+      <div class="hero-bg-blob hero-bg-blob-1"></div>
+      <div class="hero-bg-blob hero-bg-blob-2"></div>
+      <div class="hero-bg-blob hero-bg-blob-3"></div>
+      
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative z-10">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <!-- Hero Content -->
+          <div class="text-center lg:text-left">
+            <div class="animate-on-scroll">
+              <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] text-sm font-medium mb-6">
+                <span class="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse"></span>
+                全新升级 v3.0 现已发布
+              </span>
+            </div>
+            
+            <h1 class="font-display text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6 animate-on-scroll stagger-1">
+              一个平台，<br>
+              <span class="gradient-text">无限AI可能</span>
+            </h1>
+            
+            <p class="text-lg md:text-xl text-[var(--fg-muted)] mb-8 max-w-xl mx-auto lg:mx-0 animate-on-scroll stagger-2">
+              整合ChatGPT、Claude、Gemini等顶尖AI模型，提供统一接口、智能路由与成本优化，让AI赋能更简单高效。
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-on-scroll stagger-3">
+              <button class="btn-primary px-8 py-4 rounded-full text-base font-semibold shadow-lg shadow-[var(--accent)]/20">
+                开始免费试用
+              </button>
+              <button class="btn-secondary px-8 py-4 rounded-full text-base font-semibold flex items-center justify-center gap-2">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polygon points="10,8 16,12 10,16" fill="currentColor"/>
+                </svg>
+                观看演示
+              </button>
+            </div>
+            
+            <div class="mt-10 flex items-center justify-center lg:justify-start gap-6 text-sm text-[var(--fg-muted)] animate-on-scroll stagger-4">
+              <div class="flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5">
+                  <polyline points="20,6 9,17 4,12"/>
+                </svg>
+                <span>无需信用卡</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5">
+                  <polyline points="20,6 9,17 4,12"/>
+                </svg>
+                <span>14天免费</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5">
+                  <polyline points="20,6 9,17 4,12"/>
+                </svg>
+                <span>随时取消</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Hero Visual -->
+          <div class="relative animate-on-scroll">
+            <div class="relative bg-[var(--card)] rounded-2xl shadow-xl border border-[var(--border)] p-4 md:p-6">
+              <!-- Mock Dashboard -->
+              <div class="flex items-center gap-2 mb-4">
+                <div class="w-3 h-3 rounded-full bg-[#FF5F57]"></div>
+                <div class="w-3 h-3 rounded-full bg-[#FEBC2E]"></div>
+                <div class="w-3 h-3 rounded-full bg-[#28C840]"></div>
+                <span class="ml-2 text-xs text-[var(--fg-muted)]">NexusAI Dashboard</span>
+              </div>
+              
+              <div class="space-y-3">
+                <div class="bg-[var(--bg-alt)] rounded-xl p-4">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm font-medium">模型选择</span>
+                    <span class="text-xs text-[var(--accent)] font-medium">智能推荐</span>
+                  </div>
+                  <div class="grid grid-cols-3 gap-2">
+                    <div class="bg-[var(--card)] rounded-lg p-2 text-center border-2 border-[var(--accent)]">
+                      <div class="text-xs font-semibold">GPT-4o</div>
+                      <div class="text-[10px] text-[var(--fg-muted)]">推荐</div>
+                    </div>
+                    <div class="bg-[var(--card)] rounded-lg p-2 text-center border border-[var(--border)]">
+                      <div class="text-xs font-semibold">Claude 3.5</div>
+                    </div>
+                    <div class="bg-[var(--card)] rounded-lg p-2 text-center border border-[var(--border)]">
+                      <div class="text-xs font-semibold">Gemini</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="bg-[var(--bg-alt)] rounded-xl p-4">
+                  <div class="flex items-center gap-2 mb-2">
+                    <div class="w-6 h-6 rounded-full bg-[var(--accent)] flex items-center justify-center">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                      </svg>
+                    </div>
+                    <span class="text-sm font-medium">分析中...</span>
+                  </div>
+                  <div class="h-2 bg-[var(--border)] rounded-full overflow-hidden">
+                    <div class="h-full bg-[var(--accent)] rounded-full w-3/4 animate-pulse"></div>
+                  </div>
+                </div>
+                
+                <div class="bg-[var(--bg-alt)] rounded-xl p-4">
+                  <div class="text-xs text-[var(--fg-muted)] mb-1">本月使用量</div>
+                  <div class="text-2xl font-bold">2.3M <span class="text-sm font-normal text-[var(--fg-muted)]">tokens</span></div>
+                  <div class="text-xs text-[var(--success)]">节省 ¥12,450</div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Floating elements -->
+            <div class="absolute -top-4 -right-4 bg-[var(--card)] rounded-xl shadow-lg p-3 border border-[var(--border)] scroll-indicator">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-[var(--success)]/10 flex items-center justify-center">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2">
+                    <polyline points="20,6 9,17 4,12"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="text-xs font-semibold">请求成功</div>
+                  <div class="text-[10px] text-[var(--fg-muted)]">延迟 234ms</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Scroll indicator -->
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:block">
+        <div class="flex flex-col items-center gap-2 text-[var(--fg-muted)] scroll-indicator">
+          <span class="text-xs">向下滚动探索更多</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 5v14M5 12l7 7 7-7"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Partners Section -->
+    <section class="py-12 md:py-16 border-y border-[var(--border)] bg-[var(--bg-alt)]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <p class="text-center text-sm text-[var(--fg-muted)] mb-8">被全球领先企业信赖</p>
+        <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+          <div class="partner-logo font-display font-bold text-xl text-[var(--fg-muted)]">Microsoft</div>
+          <div class="partner-logo font-display font-bold text-xl text-[var(--fg-muted)]">Notion</div>
+          <div class="partner-logo font-display font-bold text-xl text-[var(--fg-muted)]">Stripe</div>
+          <div class="partner-logo font-display font-bold text-xl text-[var(--fg-muted)]">Vercel</div>
+          <div class="partner-logo font-display font-bold text-xl text-[var(--fg-muted)]">Linear</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 md:py-28">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 animate-on-scroll">
+          <h2 class="font-display text-3xl md:text-4xl font-bold mb-4">为什么选择 NexusAI</h2>
+          <p class="text-lg text-[var(--fg-muted)] max-w-2xl mx-auto">我们重新定义了AI接入方式，让复杂的技术变得简单易用</p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <!-- Feature Card 1 -->
+          <article class="feature-card bg-[var(--card)] rounded-2xl p-6 md:p-8 border border-[var(--border)] animate-on-scroll stagger-1">
+            <div class="w-12 h-12 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center mb-5">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2">
+                <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+                <polyline points="7.5,4.21 12,6.81 16.5,4.21"/>
+                <polyline points="7.5,19.79 7.5,14.6 3,12"/>
+                <polyline points="21,12 16.5,14.6 16.5,19.79"/>
+                <polyline points="3.27,6.96 12,12.01 20.73,6.96"/>
+                <line x1="12" y1="22.08" x2="12" y2="12"/>
+              </svg>
+            </div>
+            <h3 class="font-display text-xl font-semibold mb-3">统一API接口</h3>
+            <p class="text-[var(--fg-muted)]">一个API密钥访问所有主流AI模型，无需重复集成，开发效率提升300%</p>
+          </article>
+          
+          <!-- Feature Card 2 -->
+          <article class="feature-card bg-[var(--card)] rounded-2xl p-6 md:p-8 border border-[var(--border)] animate-on-scroll stagger-2">
+            <div class="w-12 h-12 rounded-xl bg-[var(--success)]/10 flex items-center justify-center mb-5">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2">
+                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+              </svg>
+            </div>
+            <h3 class="font-display text-xl font-semibold mb-3">智能路由</h3>
+            <p class="text-[var(--fg-muted)]">AI自动选择最优模型，平衡成本、速度与质量，平均节省40%费用</p>
+          </article>
+          
+          <!-- Feature Card 3 -->
+          <article class="feature-card bg-[var(--card)] rounded-2xl p-6 md:p-8 border border-[var(--border)] animate-on-scroll stagger-3">
+            <div class="w-12 h-12 rounded-xl bg-[#5B8DEF]/10 flex items-center justify-center mb-5">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5B8DEF" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <path d="M3 9h18M9 21V9"/>
+              </svg>
+            </div>
+            <h3 class="font-display text-xl font-semibold mb-3">可视化管理后台</h3>
+            <p class="text-[var(--fg-muted)]">实时监控使用量、成本分析和性能指标，团队协作一目了然</p>
+          </article>
+          
+          <!-- Feature Card 4 -->
+          <article class="feature-card bg-[var(--card)] rounded-2xl p-6 md:p-8 border border-[var(--border)] animate-on-scroll stagger-1">
+            <div class="w-12 h-12 rounded-xl bg-[#9B72F2]/10 flex items-center justify-center mb-5">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9B72F2" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <h3 class="font-display text-xl font-semibold mb-3">企业级安全</h3>
+            <p class="text-[var(--fg-muted)]">SOC2认证、数据加密传输、访问权限控制，符合GDPR要求</p>
+          </article>
+          
+          <!-- Feature Card 5 -->
+          <article class="feature-card bg-[var(--card)] rounded-2xl p-6 md:p-8 border border-[var(--border)] animate-on-scroll stagger-2">
+            <div class="w-12 h-12 rounded-xl bg-[#F2B72C]/10 flex items-center justify-center mb-5">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F2B72C" stroke-width="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+            </div>
+            <h3 class="font-display text-xl font-semibold mb-3">极速响应</h3>
+            <p class="text-[var(--fg-muted)]">全球边缘节点部署，平均延迟低于200ms，支持高并发场景</p>
+          </article>
+          
+          <!-- Feature Card 6 -->
+          <article class="feature-card bg-[var(--card)] rounded-2xl p-6 md:p-8 border border-[var(--border)] animate-on-scroll stagger-3">
+            <div class="w-12 h-12 rounded-xl bg-[#EF5B5B]/10 flex items-center justify-center mb-5">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#EF5B5B" stroke-width="2">
+                <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+              </svg>
+            </div>
+            <h3 class="font-display text-xl font-semibold mb-3">灵活定制</h3>
+            <p class="text-[var(--fg-muted)]">自定义Prompt模板、响应规则和回调逻辑，适配任何业务场景</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it Works -->
+    <section class="py-20 md:py-28 bg-[var(--bg-alt)]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 animate-on-scroll">
+          <h2 class="font-display text-3xl md:text-4xl font-bold mb-4">简单三步开始使用</h2>
+          <p class="text-lg text-[var(--fg-muted)]">无需复杂配置，几分钟内即可完成接入</p>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-8 md:gap-12">
+          <div class="text-center animate-on-scroll stagger-1">
+            <div class="w-16 h-16 rounded-2xl bg-[var(--accent)] text-white font-display font-bold text-2xl flex items-center justify-center mx-auto mb-6">1</div>
+            <h3 class="font-display text-xl font-semibold mb-3">注册账号</h3>
+            <p class="text-[var(--fg-muted)]">填写邮箱，30秒完成注册，立即获得API密钥</p>
+          </div>
+          
+          <div class="text-center animate-on-scroll stagger-2">
+            <div class="w-16 h-16 rounded-2xl bg-[var(--accent)] text-white font-display font-bold text-2xl flex items-center justify-center mx-auto mb-6">2</div>
+            <h3 class="font-display text-xl font-semibold mb-3">集成API</h3>
+            <p class="text-[var(--fg-muted)]">复制粘贴示例代码，SDK支持Python、Node.js等主流语言</p>
+          </div>
+          
+          <div class="text-center animate-on-scroll stagger-3">
+            <div class="w-16 h-16 rounded-2xl bg-[var(--accent)] text-white font-display font-bold text-2xl flex items-center justify-center mx-auto mb-6">3</div>
+            <h3 class="font-display text-xl font-semibold mb-3">开始调用</h3>
+            <p class="text-[var(--fg-muted)]">首次调用即自动激活，后台实时查看使用情况</p>
+          </div>
+        </div>
+        
+        <!-- Code snippet -->
+        <div class="mt-16 max-w-3xl mx-auto animate-on-scroll">
+          <div class="bg-[#1A1612] rounded-2xl p-6 overflow-x-auto">
+            <div class="flex items-center gap-2 mb-4">
+              <div class="w-3 h-3 rounded-full bg-[#FF5F57]"></div>
+              <div class="w-3 h-3 rounded-full bg-[#FEBC2E]"></div>
+              <div class="w-3 h-3 rounded-full bg-[#28C840]"></div>
+            </div>
+            <pre class="text-sm md:text-base"><code class="text-[#FDF8F4]"><span class="text-[#E07A5F]">import</span> nexusai
+
+client = nexusai.<span class="text-[#4A9D7C]">Client</span>(api_key=<span class="text-[#F2B72C]">"your-api-key"</span>)
+
+response = client.<span class="text-[#4A9D7C]">chat</span>(
+    messages=[{<span class="text-[#F2B72C]">"role"</span>: <span class="text-[#F2B72C]">"user"</span>, <span class="text-[#F2B72C]">"content"</span>: <span class="text-[#F2B72C]">"Hello!"</span>}],
+    model=<span class="text-[#F2B72C]">"auto"</span>  <span class="text-[#6B5E54]"># 自动选择最优模型</span>
+)
+
+<span class="text-[#E07A5F]">print</span>(response.content)</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 md:py-28">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 animate-on-scroll">
+          <h2 class="font-display text-3xl md:text-4xl font-bold mb-4">透明定价，按需付费</h2>
+          <p class="text-lg text-[var(--fg-muted)] max-w-2xl mx-auto">无隐藏费用，从个人开发者到企业团队，总有一款适合你</p>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
+          <!-- Free Plan -->
+          <div class="pricing-card bg-[var(--card)] rounded-2xl p-6 md:p-8 border border-[var(--border)] animate-on-scroll stagger-1">
+            <div class="mb-6">
+              <h3 class="font-display text-lg font-semibold mb-2">开发者版</h3>
+              <p class="text-sm text-[var(--fg-muted)]">适合个人项目与学习</p>
+            </div>
+            <div class="mb-6">
+              <span class="font-display text-4xl font-bold">免费</span>
+            </div>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center gap-3 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+                每月 100K tokens
+              </li>
+              <li class="flex items-center gap-3 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+                3种基础模型
+              </li>
+              <li class="flex items-center gap-3 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+                社区支持
+              </li>
+            </ul>
+            <button class="btn-secondary w-full py-3 rounded-full font-medium">开始使用</button>
+          </div>
+          
+          <!-- Pro Plan -->
+          <div class="pricing-card featured bg-[var(--card)] rounded-2xl p-6 md:p-8 animate-on-scroll stagger-2">
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2">
+              <span class="bg-[var(--accent)] text-white text-xs font-semibold px-3 py-1 rounded-full">最受欢迎</span>
+            </div>
+            <div class="mb-6">
+              <h3 class="font-display text-lg font-semibold mb-2">专业版</h3>
+              <p class="text-sm text-[var(--fg-muted)]">适合创业团队与中小企业</p>
+            </div>
+            <div class="mb-6">
+              <span class="font-display text-4xl font-bold">¥299</span>
+              <span class="text-[var(--fg-muted)]">/月</span>
+            </div>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center gap-3 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+                每月 5M tokens
+              </li>
+              <li class="flex items-center gap-3 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+                全部模型接入
+              </li>
+              <li class="flex items-center gap-3 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+                智能路由优化
+              </li>
+              <li class="flex items-center gap-3 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+                优先技术支持
+              </li>
+            </ul>
+            <button class="btn-primary w-full py-3 rounded-full font-medium">立即订阅</button>
+          </div>
+          
+          <!-- Enterprise Plan -->
+          <div class="pricing-card bg-[var(--card)] rounded-2xl p-6 md:p-8 border border-[var(--border)] animate-on-scroll stagger-3">
+            <div class="mb-6">
+              <h3 class="font-display text-lg font-semibold mb-2">企业版</h3>
+              <p class="text-sm text-[var(--fg-muted)]">适合大型企业与定制需求</p>
+            </div>
+            <div class="mb-6">
+              <span class="font-display text-4xl font-bold">定制</span>
+            </div>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center gap-3 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+                无限量 tokens
+              </li>
+              <li class="flex items-center gap-3 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+                私有化部署
+              </li>
+              <li class="flex items-center gap-3 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+                专属客户经理
+              </li>
+              <li class="flex items-center gap-3 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+                SLA保障
+              </li>
+            </ul>
+            <button class="btn-secondary w-full py-3 rounded-full font-medium">联系销售</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20 md:py-28 bg-[var(--bg-alt)]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 animate-on-scroll">
+          <h2 class="font-display text-3xl md:text-4xl font-bold mb-4">用户真实评价</h2>
+          <p class="text-lg text-[var(--fg-muted)]">来自全球开发者和企业的信任</p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <!-- Testimonial 1 -->
+          <article class="testimonial-card bg-[var(--card)] rounded-2xl p-6 border border-[var(--border)] animate-on-scroll stagger-1">
+            <div class="flex items-center gap-1 mb-4">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+            </div>
+            <blockquote class="text-[var(--fg)] mb-6">
+              "NexusAI literally saved us months of integration work. We went from juggling 5 different API keys to just one. The smart routing feature alone cut our AI costs by 35%. Absolutely brilliant platform."
+            </blockquote>
+            <footer class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-[var(--accent)]/20 flex items-center justify-center font-semibold text-[var(--accent)]">MK</div>
+              <div>
+                <div class="font-semibold text-sm">Marcus Kim</div>
+                <div class="text-xs text-[var(--fg-muted)]">CTO at Streamline.dev</div>
+              </div>
+            </footer>
+          </article>
+          
+          <!-- Testimonial 2 -->
+          <article class="testimonial-card bg-[var(--card)] rounded-2xl p-6 border border-[var(--border)] animate-on-scroll stagger-2">
+            <div class="flex items-center gap-1 mb-4">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+            </div>
+            <blockquote class="text-[var(--fg)] mb-6">
+              "The dashboard is incredibly intuitive. I can see exactly which models we're using, how much we're spending, and where we can optimize. It's the transparency we desperately needed."
+            </blockquote>
+            <footer class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-[var(--success)]/20 flex items-center justify-center font-semibold text-[var(--success)]">SR</div>
+              <div>
+                <div class="font-semibold text-sm">Sarah Rodriguez</div>
+                <div class="text-xs text-[var(--fg-muted)]">Lead Engineer at Notion</div>
+              </div>
+            </footer>
+          </article>
+          
+          <!-- Testimonial 3 -->
+          <article class="testimonial-card bg-[var(--card)] rounded-2xl p-6 border border-[var(--border)] animate-on-scroll stagger-3">
+            <div class="flex items-center gap-1 mb-4">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+            </div>
+            <blockquote class="text-[var(--fg)] mb-6">
+              "We were skeptical at first - another AI aggregator? But NexusAI genuinely delivers. The failover between models is seamless, and uptime has been 99.9% since we switched."
+            </blockquote>
+            <footer class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-[#5B8DEF]/20 flex items-center justify-center font-semibold text-[#5B8DEF]">JT</div>
+              <div>
+                <div class="font-semibold text-sm">James Thompson</div>
+                <div class="text-xs text-[var(--fg-muted)]">Founder at DataFlow</div>
+              </div>
+            </footer>
+          </article>
+          
+          <!-- Testimonial 4 -->
+          <article class="testimonial-card bg-[var(--card)] rounded-2xl p-6 border border-[var(--border)] animate-on-scroll stagger-1">
+            <div class="flex items-center gap-1 mb-4">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+            </div>
+            <blockquote class="text-[var(--fg)] mb-6">
+              "As a solo developer, I can't afford to manage multiple AI subscriptions. NexusAI gives me access to everything at a fraction of the cost. Their free tier is genuinely usable, not a marketing gimmick."
+            </blockquote>
+            <footer class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-[#9B72F2]/20 flex items-center justify-center font-semibold text-[#9B72F2]">EP</div>
+              <div>
+                <div class="font-semibold text-sm">Elena Petrova</div>
+                <div class="text-xs text-[var(--fg-muted)]">Indie Developer</div>
+              </div>
+            </footer>
+          </article>
+          
+          <!-- Testimonial 5 -->
+          <article class="testimonial-card bg-[var(--card)] rounded-2xl p-6 border border-[var(--border)] animate-on-scroll stagger-2">
+            <div class="flex items-center gap-1 mb-4">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+            </div>
+            <blockquote class="text-[var(--fg)] mb-6">
+              "The support team actually understands AI. When we had issues with prompt optimization, they didn't just send docs - they helped us rewrite our entire prompt strategy. Game changer."
+            </blockquote>
+            <footer class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-[#EF5B5B]/20 flex items-center justify-center font-semibold text-[#EF5B5B]">DL</div>
+              <div>
+                <div class="font-semibold text-sm">David Lee</div>
+                <div class="text-xs text-[var(--fg-muted)]">VP Engineering at Crate</div>
+              </div>
+            </footer>
+          </article>
+          
+          <!-- Testimonial 6 -->
+          <article class="testimonial-card bg-[var(--card)] rounded-2xl p-6 border border-[var(--border)] animate-on-scroll stagger-3">
+            <div class="flex items-center gap-1 mb-4">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F2B72C"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+            </div>
+            <blockquote class="text-[var(--fg)] mb-6">
+              "Migrated our entire AI infrastructure in a weekend. The documentation is clean, the API is consistent, and we actually reduced our codebase by 40%. Should have switched sooner."
+            </blockquote>
+            <footer class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-[var(--accent)]/20 flex items-center justify-center font-semibold text-[var(--accent)]">AW</div>
+              <div>
+                <div class="font-semibold text-sm">Amanda Wright</div>
+                <div class="text-xs text-[var(--fg-muted)]">Tech Lead at Immutable</div>
+              </div>
+            </footer>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-20 md:py-28">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 animate-on-scroll">
+          <h2 class="font-display text-3xl md:text-4xl font-bold mb-4">常见问题</h2>
+          <p class="text-lg text-[var(--fg-muted)]">解答你可能关心的问题</p>
+        </div>
+        
+        <div class="animate-on-scroll" role="region" aria-label="常见问题列表">
+          <!-- FAQ Item 1 -->
+          <div class="faq-item">
+            <button class="faq-button" aria-expanded="false">
+              <span class="font-semibold text-left">NexusAI支持哪些AI模型？</span>
+              <svg class="faq-icon w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6,9 12,15 18,9"/>
+              </svg>
+            </button>
+            <div class="faq-content">
+              <p class="text-[var(--fg-muted)]">我们目前支持OpenAI (GPT-4o, GPT-4, GPT-3.5)、Anthropic (Claude 3.5 Sonnet, Claude 3 Opus)、Google (Gemini Pro, Gemini Ultra)等主流模型，以及开源模型如Llama 3、Mistral等。我们持续关注最新模型发布，确保用户第一时间体验最新技术。</p>
+            </div>
+          </div>
+          
+          <!-- FAQ Item 2 -->
+          <div class="faq-item">
+            <button class="faq-button" aria-expanded="false">
+              <span class="font-semibold text-left">智能路由是如何工作的？</span>
+              <svg class="faq-icon w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6,9 12,15 18,9"/>
+              </svg>
+            </button>
+            <div class="faq-content">
+              <p class="text-[var(--fg-muted)]">智能路由会根据您的请求类型、复杂度和实时模型状态自动选择最优模型。简单查询可能路由到更快更便宜的模型，复杂推理任务则会选择更强大的模型。您也可以手动指定模型或设置偏好规则。</p>
+            </div>
+          </div>
+          
+          <!-- FAQ Item 3 -->
+          <div class="faq-item">
+            <button class="faq-button" aria-expanded="false">
+              <span class="font-semibold text-left">数据安全如何保障？</span>
+              <svg class="faq-icon w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6,9 12,15 18,9"/>
+              </svg>
+            </button>
+            <div class="faq-content">
+              <p class="text-[var(--fg-muted)]">我们采用银行级加密技术，所有数据传输使用TLS 1.3。我们通过了SOC2 Type II认证，符合GDPR要求。您的数据不会被用于模型训练，且企业版支持私有化部署，数据完全掌控在您手中。</p>
+            </div>
+          </div>
+          
+          <!-- FAQ Item 4 -->
+          <div class="faq-item">
+            <button class="faq-button" aria-expanded="false">
+              <span class="font-semibold text-left">可以随时取消订阅吗？</span>
+              <svg class="faq-icon w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6,9 12,15 18,9"/>
+              </svg>
+            </button>
+            <div class="faq-content">
+              <p class="text-[var(--fg-muted)]">当然可以。您可以随时在账户设置中取消订阅，无需任何理由，也没有隐藏费用。取消后，您仍可使用服务直至当前计费周期结束。我们还提供14天无理由退款保证。</p>
+            </div>
+          </div>
+          
+          <!-- FAQ Item 5 -->
+          <div class="faq-item">
+            <button class="faq-button" aria-expanded="false">
+              <span class="font-semibold text-left">如何处理模型故障或服务中断？</span>
+              <svg class="faq-icon w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6,9 12,15 18,9"/>
+              </svg>
+            </button>
+            <div class="faq-content">
+              <p class="text-[var(--fg-muted)]">我们的系统具备自动故障转移功能。当某个模型不可用时，会自动切换到备用模型，确保您的服务不中断。企业版用户享有99.9%的SLA保障和专属技术支持团队。</p>
+            </div>
+          </div>
+          
+          <!-- FAQ Item 6 -->
+          <div class="faq-item">
+            <button class="faq-button" aria-expanded="false">
+              <span class="font-semibold text-left">支持哪些编程语言？</span>
+              <svg class="faq-icon w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6,9 12,15 18,9"/>
+              </svg>
+            </button>
+            <div class="faq-content">
+              <p class="text-[var(--fg-muted)]">我们提供RESTful API，兼容OpenAI SDK格式，支持Python、JavaScript/TypeScript、Go、Java、Ruby、PHP等所有主流语言。详细的SDK文档和代码示例可在开发者中心查看。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 md:py-28">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="relative bg-gradient-to-br from-[var(--accent)] to-[#C96A52] rounded-3xl p-8 md:p-16 text-center text-white overflow-hidden animate-on-scroll">
+          <!-- Background pattern -->
+          <div class="absolute inset-0 opacity-10">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"/>
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#grid)"/>
+            </svg>
+          </div>
+          
+          <div class="relative z-10">
+            <h2 class="font-display text-3xl md:text-5xl font-bold mb-6">准备好开始了吗？</h2>
+            <p class="text-lg md:text-xl opacity-90 max-w-2xl mx-auto mb-8">
+              加入超过10,000名开发者的行列，让AI为您的产品赋能
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <button class="bg-white text-[var(--accent)] px-8 py-4 rounded-full font-semibold hover:bg-opacity-90 transition-all shadow-lg">
+                免费开始使用
+              </button>
+              <button class="border-2 border-white/50 px-8 py-4 rounded-full font-semibold hover:bg-white/10 transition-all">
+                预约演示
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#1A1612] text-[#FDF8F4] py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+        <!-- Brand -->
+        <div class="lg:col-span-2">
+          <a href="#" class="flex items-center gap-2 font-display font-bold text-xl mb-4">
+            <div class="w-8 h-8 rounded-lg bg-[var(--accent)] flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+            <span>NexusAI</span>
+          </a>
+          <p class="text-[#FDF8F4]/60 text-sm max-w-xs mb-6">
+            整合全球顶尖AI模型，提供统一接口与智能路由，让AI赋能更简单高效。
+          </p>
+          <div class="flex gap-4">
+            <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors" aria-label="Twitter">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+            </a>
+            <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors" aria-label="GitHub">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+              </svg>
+            </a>
+            <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors" aria-label="Discord">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Links -->
+        <div>
+          <h4 class="font-semibold mb-4">产品</h4>
+          <ul class="space-y-3 text-sm text-[#FDF8F4]/60">
+            <li><a href="#" class="hover:text-white transition-colors">功能特性</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">定价方案</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">更新日志</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">路线图</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="font-semibold mb-4">资源</h4>
+          <ul class="space-y-3 text-sm text-[#FDF8F4]/60">
+            <li><a href="#" class="hover:text-white transition-colors">开发文档</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">API参考</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">示例代码</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">博客</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="font-semibold mb-4">公司</h4>
+          <ul class="space-y-3 text-sm text-[#FDF8F4]/60">
+            <li><a href="#" class="hover:text-white transition-colors">关于我们</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">加入我们</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">隐私政策</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">服务条款</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-[#FDF8F4]/40">
+        <p>2024 NexusAI. All rights reserved.</p>
+        <p>Made with care in Shanghai</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize all interactive elements
+    document.addEventListener('DOMContentLoaded', function() {
+      // Mobile menu functionality
+      const menuToggle = document.getElementById('menu-toggle');
+      const menuClose = document.getElementById('menu-close');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const mobileOverlay = document.getElementById('mobile-overlay');
+      
+      function openMobileMenu() {
+        mobileMenu.classList.add('open');
+        mobileOverlay.classList.add('open');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        mobileOverlay.setAttribute('aria-hidden', 'false');
+        menuToggle.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      }
+      
+      function closeMobileMenu() {
+        mobileMenu.classList.remove('open');
+        mobileOverlay.classList.remove('open');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        mobileOverlay.setAttribute('aria-hidden', 'true');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+      
+      if (menuToggle) {
+        menuToggle.addEventListener('click', openMobileMenu);
+      }
+      if (menuClose) {
+        menuClose.addEventListener('click', closeMobileMenu);
+      }
+      if (mobileOverlay) {
+        mobileOverlay.addEventListener('click', closeMobileMenu);
+      }
+      
+      // Close mobile menu when clicking on nav links
+      const mobileNavLinks = mobileMenu ? mobileMenu.querySelectorAll('a') : [];
+      mobileNavLinks.forEach(function(link) {
+        link.addEventListener('click', closeMobileMenu);
+      });
+      
+      // FAQ accordion functionality
+      const faqItems = document.querySelectorAll('.faq-item');
+      faqItems.forEach(function(item) {
+        const button = item.querySelector('.faq-button');
+        if (button) {
+          button.addEventListener('click', function() {
+            const isOpen = item.classList.contains('open');
+            
+            // Close all other items
+            faqItems.forEach(function(otherItem) {
+              otherItem.classList.remove('open');
+              const otherButton = otherItem.querySelector('.faq-button');
+              if (otherButton) {
+                otherButton.setAttribute('aria-expanded', 'false');
+              }
+            });
+            
+            // Toggle current item
+            if (!isOpen) {
+              item.classList.add('open');
+              button.setAttribute('aria-expanded', 'true');
+            }
+          });
+        }
+      });
+      
+      // Scroll animation with IntersectionObserver
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      
+      if (!prefersReducedMotion) {
+        const animatedElements = document.querySelectorAll('.animate-on-scroll');
+        
+        const observerOptions = {
+          root: null,
+          rootMargin: '0px 0px -50px 0px',
+          threshold: 0.1
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, observerOptions);
+        
+        animatedElements.forEach(function(el) {
+          observer.observe(el);
+        });
+      } else {
+        // If reduced motion is preferred, show all elements immediately
+        var staticElements = document.querySelectorAll('.animate-on-scroll');
+        staticElements.forEach(function(el) {
+          el.classList.add('visible');
+        });
+      }
+      
+      // Smooth scroll for anchor links
+      const anchorLinks = document.querySelectorAll('a[href^="#"]');
+      anchorLinks.forEach(function(link) {
+        link.addEventListener('click', function(e) {
+          var href = this.getAttribute('href');
+          if (href && href !== '#') {
+            var target = document.querySelector(href);
+            if (target) {
+              e.preventDefault();
+              var headerHeight = 80;
+              var targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+              window.scrollTo({
+                top: targetPosition,
+                behavior: prefersReducedMotion ? 'auto' : 'smooth'
+              });
+            }
+          }
+        });
+      });
+      
+      // Keyboard navigation for FAQ
+      faqItems.forEach(function(item) {
+        var btn = item.querySelector('.faq-button');
+        if (btn) {
+          btn.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              btn.click();
+            }
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
