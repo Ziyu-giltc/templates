@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TempMail Pro - 安全临时的邮箱服务</title>
+  <meta name="description" content="免费、安全、即用的临时邮箱服务，保护您的隐私免受垃圾邮件侵扰。">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg-elevated: #141414;
+      --card: #1a1a1a;
+      --border: #2a2a2a;
+      --fg: #ffffff;
+      --muted: #737373;
+      --accent: #00d9a5;
+      --accent-hover: #00f5b8;
+      --danger: #ff4d4d;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    /* Skip Link */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--accent);
+      color: var(--bg);
+      padding: 8px 16px;
+      z-index: 100;
+      transition: top 0.3s;
+    }
+
+    .skip-link:focus {
+      top: 0;
+    }
+
+    /* Focus styles */
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--muted);
+    }
+
+    /* Background Pattern */
+    .bg-pattern {
+      background-image: 
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 217, 165, 0.15), transparent),
+        radial-gradient(circle at 70% 80%, rgba(0, 217, 165, 0.05), transparent 40%);
+    }
+
+    /* Grid Pattern */
+    .grid-pattern {
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .animate-fade-in-up {
+      animation: fadeInUp 0.6s ease-out forwards;
+      opacity: 0;
+    }
+
+    .animate-delay-1 { animation-delay: 0.1s; }
+    .animate-delay-2 { animation-delay: 0.2s; }
+    .animate-delay-3 { animation-delay: 0.3s; }
+    .animate-delay-4 { animation-delay: 0.4s; }
+    .animate-delay-5 { animation-delay: 0.5s; }
+
+    /* Email Demo Box */
+    .email-demo-box {
+      background: linear-gradient(135deg, var(--card) 0%, #0f0f0f 100%);
+      border: 1px solid var(--border);
+      box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.3),
+        0 2px 4px -1px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    }
+
+    .email-address {
+      font-family: 'Space Grotesk', monospace;
+      letter-spacing: 0.05em;
+    }
+
+    /* Card Styles */
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(0, 217, 165, 0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Button Styles */
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(0, 217, 165, 0.3);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--fg);
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* FAQ Accordion */
+    .faq-item {
+      border: 1px solid var(--border);
+      background: var(--card);
+      transition: all 0.3s ease;
+    }
+
+    .faq-item:hover {
+      border-color: rgba(0, 217, 165, 0.3);
+    }
+
+    .faq-button {
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .faq-button:hover {
+      color: var(--accent);
+    }
+
+    .faq-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .faq-content.open {
+      max-height: 500px;
+    }
+
+    .faq-icon {
+      transition: transform 0.3s ease;
+    }
+
+    .faq-item.open .faq-icon {
+      transform: rotate(180deg);
+    }
+
+    /* Review Card */
+    .review-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    .review-card:hover {
+      border-color: rgba(0, 217, 165, 0.2);
+    }
+
+    /* Nav */
+    .nav-scrolled {
+      background: rgba(10, 10, 10, 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Mobile Menu */
+    .mobile-menu {
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    }
+
+    .mobile-menu.open {
+      transform: translateX(0);
+    }
+
+    /* Stat Counter Animation */
+    .stat-number {
+      background: linear-gradient(135deg, var(--fg) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--card);
+      border: 1px solid var(--accent);
+      padding: 12px 24px;
+      border-radius: 8px;
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Intersection Observer Reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body class="bg-pattern min-h-screen">
+  <!-- Skip Link for Accessibility -->
+  <a href="#main-content" class="skip-link">跳转到主要内容</a>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast" role="alert" aria-live="polite">
+    <span class="text-sm">邮箱地址已复制到剪贴板</span>
+  </div>
+
+  <!-- Navigation -->
+  <header>
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" role="navigation" aria-label="主导航">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16 md:h-20">
+          <!-- Logo -->
+          <a href="#" class="flex items-center gap-2" aria-label="TempMail Pro 首页">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00d9a5] to-[#00a67d] flex items-center justify-center">
+              <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <span class="text-xl font-bold tracking-tight">TempMail<span class="text-[#00d9a5]">Pro</span></span>
+          </a>
+
+          <!-- Desktop Navigation -->
+          <div class="hidden md:flex items-center gap-8">
+            <a href="#features" class="text-[#737373] hover:text-white transition-colors">功能</a>
+            <a href="#how-it-works" class="text-[#737373] hover:text-white transition-colors">工作原理</a>
+            <a href="#reviews" class="text-[#737373] hover:text-white transition-colors">用户评价</a>
+            <a href="#faq" class="text-[#737373] hover:text-white transition-colors">常见问题</a>
+          </div>
+
+          <!-- CTA Buttons -->
+          <div class="hidden md:flex items-center gap-4">
+            <button class="btn-secondary px-4 py-2 rounded-lg text-sm">登录</button>
+            <button class="btn-primary px-4 py-2 rounded-lg text-sm">立即使用</button>
+          </div>
+
+          <!-- Mobile Menu Button -->
+          <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-[#1a1a1a] transition-colors" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 bottom-0 w-72 bg-[#0a0a0a] border-l border-[#2a2a2a] md:hidden z-50" aria-hidden="true">
+        <div class="p-6">
+          <button id="close-menu-btn" class="absolute top-4 right-4 p-2 rounded-lg hover:bg-[#1a1a1a] transition-colors" aria-label="关闭菜单">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+          <nav class="mt-8 flex flex-col gap-4">
+            <a href="#features" class="text-lg py-2 text-[#737373] hover:text-white transition-colors">功能</a>
+            <a href="#how-it-works" class="text-lg py-2 text-[#737373] hover:text-white transition-colors">工作原理</a>
+            <a href="#reviews" class="text-lg py-2 text-[#737373] hover:text-white transition-colors">用户评价</a>
+            <a href="#faq" class="text-lg py-2 text-[#737373] hover:text-white transition-colors">常见问题</a>
+            <hr class="border-[#2a2a2a] my-4">
+            <button class="btn-secondary w-full py-3 rounded-lg">登录</button>
+            <button class="btn-primary w-full py-3 rounded-lg">立即使用</button>
+          </nav>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center pt-20 grid-pattern" aria-labelledby="hero-heading">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <!-- Hero Content -->
+          <div class="text-center lg:text-left">
+            <div class="animate-fade-in-up">
+              <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1a1a1a] border border-[#2a2a2a] text-sm text-[#737373] mb-6">
+                <span class="w-2 h-2 rounded-full bg-[#00d9a5] animate-pulse"></span>
+                全球超过 200 万用户信赖
+              </span>
+            </div>
+            
+            <h1 id="hero-heading" class="animate-fade-in-up animate-delay-1 text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+              保护您的隐私<br>
+              <span class="text-[#00d9a5]">远离垃圾邮件</span>
+            </h1>
+            
+            <p class="animate-fade-in-up animate-delay-2 text-lg sm:text-xl text-[#737373] mb-8 max-w-xl mx-auto lg:mx-0">
+              一键生成临时邮箱，无需注册，即时使用。安全、私密、免费保护您的真实邮箱地址。
+            </p>
+
+            <!-- Stats -->
+            <div class="animate-fade-in-up animate-delay-3 flex flex-wrap justify-center lg:justify-start gap-8 mb-10">
+              <div class="text-center lg:text-left">
+                <div class="stat-number text-3xl sm:text-4xl font-bold" data-target="2500000">0</div>
+                <div class="text-sm text-[#737373]">活跃用户</div>
+              </div>
+              <div class="text-center lg:text-left">
+                <div class="stat-number text-3xl sm:text-4xl font-bold" data-target="150">0</div>
+                <div class="text-sm text-[#737373]">支持域名</div>
+              </div>
+              <div class="text-center lg:text-left">
+                <div class="stat-number text-3xl sm:text-4xl font-bold" data-target="99.9">0</div>
+                <div class="text-sm text-[#737373]">% 正常运行</div>
+              </div>
+            </div>
+
+            <div class="animate-fade-in-up animate-delay-4 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <button class="btn-primary px-8 py-4 rounded-xl text-lg">免费开始使用</button>
+              <button class="btn-secondary px-8 py-4 rounded-xl text-lg flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+                观看演示
+              </button>
+            </div>
+          </div>
+
+          <!-- Email Demo -->
+          <div class="animate-fade-in-up animate-delay-5">
+            <div class="email-demo-box rounded-2xl p-6 sm:p-8">
+              <!-- Email Header -->
+              <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                  <div class="w-3 h-3 rounded-full bg-[#ff4d4d]"></div>
+                  <div class="w-3 h-3 rounded-full bg-[#ffb84d]"></div>
+                  <div class="w-3 h-3 rounded-full bg-[#00d9a5]"></div>
+                </div>
+                <span class="text-xs text-[#737373]">临时邮箱</span>
+              </div>
+
+              <!-- Email Address Display -->
+              <div class="bg-[#0a0a0a] rounded-xl p-4 mb-6">
+                <label class="text-xs text-[#737373] mb-2 block">您的临时邮箱地址</label>
+                <div class="flex items-center justify-between gap-4">
+                  <span id="email-display" class="email-address text-lg sm:text-xl text-[#00d9a5] truncate">random123@tempmail.pro</span>
+                  <button id="copy-btn" class="flex-shrink-0 p-2 rounded-lg bg-[#1a1a1a] hover:bg-[#2a2a2a] transition-colors" aria-label="复制邮箱地址">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="flex gap-3 mb-6">
+                <button id="refresh-email-btn" class="flex-1 btn-secondary px-4 py-3 rounded-xl flex items-center justify-center gap-2">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                  </svg>
+                  生成新邮箱
+                </button>
+                <button class="flex-1 btn-primary px-4 py-3 rounded-xl flex items-center justify-center gap-2">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                  </svg>
+                  查看收件箱
+                </button>
+              </div>
+
+              <!-- Inbox Preview -->
+              <div class="space-y-3">
+                <div class="flex items-center justify-between text-sm">
+                  <span class="text-[#737373]">收件箱</span>
+                  <span class="text-[#00d9a5]">3 封新邮件</span>
+                </div>
+                
+                <div class="bg-[#0a0a0a] rounded-lg p-3 border-l-2 border-[#00d9a5] hover:bg-[#0f0f0f] transition-colors cursor-pointer">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="min-w-0">
+                      <div class="font-medium text-sm truncate">验证您的账户</div>
+                      <div class="text-xs text-[#737373] truncate">noreply@service.com</div>
+                    </div>
+                    <span class="text-xs text-[#737373] flex-shrink-0">刚刚</span>
+                  </div>
+                </div>
+
+                <div class="bg-[#0a0a0a] rounded-lg p-3 hover:bg-[#0f0f0f] transition-colors cursor-pointer">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="min-w-0">
+                      <div class="font-medium text-sm truncate">您的订单已确认</div>
+                      <div class="text-xs text-[#737373] truncate">orders@shop.com</div>
+                    </div>
+                    <span class="text-xs text-[#737373] flex-shrink-0">5分钟前</span>
+                  </div>
+                </div>
+
+                <div class="bg-[#0a0a0a] rounded-lg p-3 hover:bg-[#0f0f0f] transition-colors cursor-pointer">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="min-w-0">
+                      <div class="font-medium text-sm truncate">欢迎加入社区</div>
+                      <div class="text-xs text-[#737373] truncate">welcome@community.io</div>
+                    </div>
+                    <span class="text-xs text-[#737373] flex-shrink-0">1小时前</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll Indicator -->
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce hidden md:block">
+        <svg class="w-6 h-6 text-[#737373]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Trusted By -->
+    <section class="py-12 border-y border-[#2a2a2a]" aria-label="合作伙伴">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <p class="text-center text-sm text-[#737373] mb-8">被全球知名企业员工信赖使用</p>
+        <div class="flex flex-wrap justify-center items-center gap-8 sm:gap-12 opacity-50">
+          <svg class="h-6 sm:h-8" viewBox="0 0 124 24" fill="currentColor" aria-hidden="true">
+            <text x="0" y="18" font-family="Space Grotesk" font-size="18" font-weight="600">Google</text>
+          </svg>
+          <svg class="h-6 sm:h-8" viewBox="0 0 124 24" fill="currentColor" aria-hidden="true">
+            <text x="0" y="18" font-family="Space Grotesk" font-size="18" font-weight="600">Microsoft</text>
+          </svg>
+          <svg class="h-6 sm:h-8" viewBox="0 0 124 24" fill="currentColor" aria-hidden="true">
+            <text x="0" y="18" font-family="Space Grotesk" font-size="18" font-weight="600">Amazon</text>
+          </svg>
+          <svg class="h-6 sm:h-8" viewBox="0 0 124 24" fill="currentColor" aria-hidden="true">
+            <text x="0" y="18" font-family="Space Grotesk" font-size="18" font-weight="600">Meta</text>
+          </svg>
+          <svg class="h-6 sm:h-8" viewBox="0 0 124 24" fill="currentColor" aria-hidden="true">
+            <text x="0" y="18" font-family="Space Grotesk" font-size="18" font-weight="600">Apple</text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 md:py-28" aria-labelledby="features-heading">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 reveal">
+          <h2 id="features-heading" class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+            为什么选择 <span class="text-[#00d9a5]">TempMail Pro</span>
+          </h2>
+          <p class="text-lg text-[#737373] max-w-2xl mx-auto">
+            我们提供业界领先的临时邮箱服务，让您在保护隐私的同时享受极致便捷
+          </p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Feature 1 -->
+          <article class="feature-card rounded-2xl p-6 sm:p-8 reveal">
+            <div class="w-12 h-12 rounded-xl bg-[#00d9a5]/10 flex items-center justify-center mb-6">
+              <svg class="w-6 h-6 text-[#00d9a5]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3">即时生成</h3>
+            <p class="text-[#737373]">
+              无需注册账户，一键即可生成临时邮箱地址。平均生成时间小于 0.5 秒。
+            </p>
+          </article>
+
+          <!-- Feature 2 -->
+          <article class="feature-card rounded-2xl p-6 sm:p-8 reveal">
+            <div class="w-12 h-12 rounded-xl bg-[#00d9a5]/10 flex items-center justify-center mb-6">
+              <svg class="w-6 h-6 text-[#00d9a5]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3">完全匿名</h3>
+            <p class="text-[#737373]">
+              我们不收集任何个人信息，不记录 IP 地址，确保您的身份完全保密。
+            </p>
+          </article>
+
+          <!-- Feature 3 -->
+          <article class="feature-card rounded-2xl p-6 sm:p-8 reveal">
+            <div class="w-12 h-12 rounded-xl bg-[#00d9a5]/10 flex items-center justify-center mb-6">
+              <svg class="w-6 h-6 text-[#00d9a5]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3">自定义时长</h3>
+            <p class="text-[#737373]">
+              从 10 分钟到 7 天，自由选择邮箱有效期。需要更长时间？一键延长。
+            </p>
+          </article>
+
+          <!-- Feature 4 -->
+          <article class="feature-card rounded-2xl p-6 sm:p-8 reveal">
+            <div class="w-12 h-12 rounded-xl bg-[#00d9a5]/10 flex items-center justify-center mb-6">
+              <svg class="w-6 h-6 text-[#00d9a5]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3">多域名支持</h3>
+            <p class="text-[#737373]">
+              超过 150 个域名可供选择，轻松绕过网站对临时邮箱的限制。
+            </p>
+          </article>
+
+          <!-- Feature 5 -->
+          <article class="feature-card rounded-2xl p-6 sm:p-8 reveal">
+            <div class="w-12 h-12 rounded-xl bg-[#00d9a5]/10 flex items-center justify-center mb-6">
+              <svg class="w-6 h-6 text-[#00d9a5]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3">安全加密</h3>
+            <p class="text-[#737373]">
+              端到端 TLS 加密，邮件自动销毁，确保您的通信安全无虞。
+            </p>
+          </article>
+
+          <!-- Feature 6 -->
+          <article class="feature-card rounded-2xl p-6 sm:p-8 reveal">
+            <div class="w-12 h-12 rounded-xl bg-[#00d9a5]/10 flex items-center justify-center mb-6">
+              <svg class="w-6 h-6 text-[#00d9a5]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3">移动优先</h3>
+            <p class="text-[#737373]">
+              完美适配手机和平板，随时随地在任何设备上管理您的临时邮箱。
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-20 md:py-28 bg-[#0f0f0f]" aria-labelledby="how-heading">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 reveal">
+          <h2 id="how-heading" class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+            三步开始保护您的隐私
+          </h2>
+          <p class="text-lg text-[#737373] max-w-2xl mx-auto">
+            简单直观的使用流程，让隐私保护变得轻而易举
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8 md:gap-4">
+          <!-- Step 1 -->
+          <div class="relative reveal">
+            <div class="text-center">
+              <div class="relative inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-[#1a1a1a] border border-[#2a2a2a] mb-6">
+                <span class="text-3xl font-bold text-[#00d9a5]">1</span>
+              </div>
+              <h3 class="text-xl font-bold mb-3">生成邮箱</h3>
+              <p class="text-[#737373]">
+                点击按钮，系统自动为您生成一个随机临时邮箱地址
+              </p>
+            </div>
+            <!-- Connector -->
+            <div class="hidden md:block absolute top-10 left-full w-full h-[2px] bg-gradient-to-r from-[#00d9a5] to-transparent -translate-x-8"></div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="relative reveal">
+            <div class="text-center">
+              <div class="relative inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-[#1a1a1a] border border-[#2a2a2a] mb-6">
+                <span class="text-3xl font-bold text-[#00d9a5]">2</span>
+              </div>
+              <h3 class="text-xl font-bold mb-3">复制使用</h3>
+              <p class="text-[#737373]">
+                复制邮箱地址，在需要注册的网站或服务中粘贴使用
+              </p>
+            </div>
+            <!-- Connector -->
+            <div class="hidden md:block absolute top-10 left-full w-full h-[2px] bg-gradient-to-r from-[#00d9a5] to-transparent -translate-x-8"></div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="reveal">
+            <div class="text-center">
+              <div class="relative inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-[#1a1a1a] border border-[#2a2a2a] mb-6">
+                <span class="text-3xl font-bold text-[#00d9a5]">3</span>
+              </div>
+              <h3 class="text-xl font-bold mb-3">接收邮件</h3>
+              <p class="text-[#737373]">
+                即时接收验证邮件，完成后邮箱自动销毁，不留痕迹
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="py-20 md:py-28" aria-labelledby="pricing-heading">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 reveal">
+          <h2 id="pricing-heading" class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+            简单透明的定价
+          </h2>
+          <p class="text-lg text-[#737373] max-w-2xl mx-auto">
+            基础功能永久免费，升级享受更多高级特性
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <!-- Free Plan -->
+          <div class="feature-card rounded-2xl p-8 reveal">
+            <div class="mb-6">
+              <h3 class="text-lg font-bold text-[#737373] mb-2">免费版</h3>
+              <div class="flex items-baseline gap-1">
+                <span class="text-4xl font-bold">$0</span>
+                <span class="text-[#737373]">/永久</span>
+              </div>
+            </div>
+            <ul class="space-y-4 mb-8" role="list">
+              <li class="flex items-center gap-3">
+                <svg class="w-5 h-5 text-[#00d9a5] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                <span>无限邮箱生成</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <svg class="w-5 h-5 text-[#00d9a5] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                <span>10分钟有效期</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <svg class="w-5 h-5 text-[#00d9a5] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                <span>5个域名可选</span>
+              </li>
+              <li class="flex items-center gap-3 text-[#737373]">
+                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+                <span>无广告</span>
+              </li>
+            </ul>
+            <button class="w-full btn-secondary py-3 rounded-xl">开始使用</button>
+          </div>
+
+          <!-- Pro Plan -->
+          <div class="feature-card rounded-2xl p-8 relative border-[#00d9a5]/50 reveal">
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2">
+              <span class="px-3 py-1 bg-[#00d9a5] text-black text-xs font-bold rounded-full">推荐</span>
+            </div>
+            <div class="mb-6">
+              <h3 class="text-lg font-bold text-[#00d9a5] mb-2">专业版</h3>
+              <div class="flex items-baseline gap-1">
+                <span class="text-4xl font-bold">$4.99</span>
+                <span class="text-[#737373]">/月</span>
+              </div>
+            </div>
+            <ul class="space-y-4 mb-8" role="list">
+              <li class="flex items-center gap-3">
+                <svg class="w-5 h-5 text-[#00d9a5] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                <span>所有免费版功能</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <svg class="w-5 h-5 text-[#00d9a5] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                <span>7天有效期</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <svg class="w-5 h-5 text-[#00d9a5] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                <span>150+域名可选</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <svg class="w-5 h-5 text-[#00d9a5] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                <span>无广告体验</span>
+              </li>
+            </ul>
+            <button class="w-full btn-primary py-3 rounded-xl">升级专业版</button>
+          </div>
+
+          <!-- Enterprise Plan -->
+          <div class="feature-card rounded-2xl p-8 reveal">
+            <div class="mb-6">
+              <h3 class="text-lg font-bold text-[#737373] mb-2">企业版</h3>
+              <div class="flex items-baseline gap-1">
+                <span class="text-4xl font-bold">定制</span>
+              </div>
+            </div>
+            <ul class="space-y-4 mb-8" role="list">
+              <li class="flex items-center gap-3">
+                <svg class="w-5 h-5 text-[#00d9a5] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                <span>所有专业版功能</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <svg class="w-5 h-5 text-[#00d9a5] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                <span>自定义域名</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <svg class="w-5 h-5 text-[#00d9a5] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                <span>API接入</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <svg class="w-5 h-5 text-[#00d9a5] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                <span>专属客户经理</span>
+              </li>
+            </ul>
+            <button class="w-full btn-secondary py-3 rounded-xl">联系我们</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews" class="py-20 md:py-28 bg-[#0f0f0f]" aria-labelledby="reviews-heading">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 reveal">
+          <h2 id="reviews-heading" class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+            用户怎么说
+          </h2>
+          <p class="text-lg text-[#737373] max-w-2xl mx-auto">
+            来自全球用户的真实反馈
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Review 1 -->
+          <article class="review-card rounded-2xl p-6 reveal">
+            <div class="flex items-center gap-1 mb-4" aria-label="5星评价">
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <blockquote class="text-lg mb-6">
+              "Finally a temp mail service that just works. I use it for testing our signup flows during development. The API integration was straightforward and reliable."
+            </blockquote>
+            <footer class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#00d9a5] to-[#006644] flex items-center justify-center text-lg font-bold">
+                M
+              </div>
+              <div>
+                <cite class="not-italic font-semibold">Marcus Chen</cite>
+                <p class="text-sm text-[#737373]">Senior Developer at Stripe</p>
+              </div>
+            </footer>
+          </article>
+
+          <!-- Review 2 -->
+          <article class="review-card rounded-2xl p-6 reveal">
+            <div class="flex items-center gap-1 mb-4" aria-label="5星评价">
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <blockquote class="text-lg mb-6">
+              "Saved me from so much spam. I used to get dozens of promotional emails after signing up for services. Now I just use TempMail Pro for one-time registrations."
+            </blockquote>
+            <footer class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#ff6b6b] to-[#c44] flex items-center justify-center text-lg font-bold">
+                S
+              </div>
+              <div>
+                <cite class="not-italic font-semibold">Sarah Mitchell</cite>
+                <p class="text-sm text-[#737373]">Product Manager at Shopify</p>
+              </div>
+            </footer>
+          </article>
+
+          <!-- Review 3 -->
+          <article class="review-card rounded-2xl p-6 reveal">
+            <div class="flex items-center gap-1 mb-4" aria-label="5星评价">
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <blockquote class="text-lg mb-6">
+              "The custom domain feature is a game-changer. Some websites block common temp email domains, but with TempMail Pro I can use domains that look completely legitimate."
+            </blockquote>
+            <footer class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#6b8aff] to-[#4460c4] flex items-center justify-center text-lg font-bold">
+                J
+              </div>
+              <div>
+                <cite class="not-italic font-semibold">James Rodriguez</cite>
+                <p class="text-sm text-[#737373]">QA Engineer at Atlassian</p>
+              </div>
+            </footer>
+          </article>
+
+          <!-- Review 4 -->
+          <article class="review-card rounded-2xl p-6 reveal">
+            <div class="flex items-center gap-1 mb-4" aria-label="4星评价">
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#2a2a2a]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <blockquote class="text-lg mb-6">
+              "Clean interface, fast email delivery. Would love to see a mobile app in the future, but the mobile web version works perfectly fine for now."
+            </blockquote>
+            <footer class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#ffd93d] to-[#c4a000] flex items-center justify-center text-lg font-bold text-black">
+                A
+              </div>
+              <div>
+                <cite class="not-italic font-semibold">Anna Kowalski</cite>
+                <p class="text-sm text-[#737373]">Freelance Designer</p>
+              </div>
+            </footer>
+          </article>
+
+          <!-- Review 5 -->
+          <article class="review-card rounded-2xl p-6 reveal">
+            <div class="flex items-center gap-1 mb-4" aria-label="5星评价">
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <blockquote class="text-lg mb-6">
+              "We've integrated TempMail Pro into our CI/CD pipeline for automated testing. The API is rock solid and the documentation is excellent. Highly recommended."
+            </blockquote>
+            <footer class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#a855f7] to-[#7c3aed] flex items-center justify-center text-lg font-bold">
+                D
+              </div>
+              <div>
+                <cite class="not-italic font-semibold">David Park</cite>
+                <p class="text-sm text-[#737373]">DevOps Lead at Twilio</p>
+              </div>
+            </footer>
+          </article>
+
+          <!-- Review 6 -->
+          <article class="review-card rounded-2xl p-6 reveal">
+            <div class="flex items-center gap-1 mb-4" aria-label="5星评价">
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg class="w-5 h-5 text-[#00d9a5]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <blockquote class="text-lg mb-6">
+              "Privacy matters to me. I love that TempMail Pro doesn't track anything. No logs, no IP recording, just a simple service that does exactly what it promises."
+            </blockquote>
+            <footer class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#00d9a5] to-[#0088aa] flex items-center justify-center text-lg font-bold">
+                E
+              </div>
+              <div>
+                <cite class="not-italic font-semibold">Emma Thompson</cite>
+                <p class="text-sm text-[#737373]">Security Consultant</p>
+              </div>
+            </footer>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-20 md:py-28" aria-labelledby="faq-heading">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 reveal">
+          <h2 id="faq-heading" class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+            常见问题
+          </h2>
+          <p class="text-lg text-[#737373]">
+            关于 TempMail Pro 的一切疑问
+          </p>
+        </div>
+
+        <div class="space-y-4" role="list">
+          <!-- FAQ Item 1 -->
+          <div class="faq-item rounded-xl overflow-hidden reveal" role="listitem">
+            <button class="faq-button w-full px-6 py-5 flex items-center justify-between text-left" aria-expanded="false">
+              <span class="font-semibold text-lg">什么是临时邮箱？</span>
+              <svg class="faq-icon w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+            <div class="faq-content px-6 pb-5">
+              <p class="text-[#737373]">
+                临时邮箱是一种一次性使用的邮箱地址，用于在不暴露真实邮箱的情况下接收邮件。它会在设定的时间后自动失效，所有邮件将被永久删除，有效保护您的隐私免受垃圾邮件和营销信息的侵扰。
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ Item 2 -->
+          <div class="faq-item rounded-xl overflow-hidden reveal" role="listitem">
+            <button class="faq-button w-full px-6 py-5 flex items-center justify-between text-left" aria-expanded="false">
+              <span class="font-semibold text-lg">临时邮箱安全吗？</span>
+              <svg class="faq-icon w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+            <div class="faq-content px-6 pb-5">
+              <p class="text-[#737373]">
+                TempMail Pro 采用端到端 TLS 加密，我们不记录 IP 地址，不存储任何个人信息。所有邮件在邮箱过期后会被永久删除。但我们建议不要使用临时邮箱接收敏感信息，如银行账户验证或重要法律文件。
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ Item 3 -->
+          <div class="faq-item rounded-xl overflow-hidden reveal" role="listitem">
+            <button class="faq-button w-full px-6 py-5 flex items-center justify-between text-left" aria-expanded="false">
+              <span class="font-semibold text-lg">邮箱地址可以保存多久？</span>
+              <svg class="faq-icon w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+            <div class="faq-content px-6 pb-5">
+              <p class="text-[#737373]">
+                免费用户邮箱有效期为 10 分钟，可手动延长。专业版用户可选择 1 小时至 7 天的有效期。企业版用户可设置更长的有效期或永久邮箱。邮箱过期后，所有邮件将被自动删除且无法恢复。
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ Item 4 -->
+          <div class="faq-item rounded-xl overflow-hidden reveal" role="listitem">
+            <button class="faq-button w-full px-6 py-5 flex items-center justify-between text-left" aria-expanded="false">
+              <span class="font-semibold text-lg">可以发送邮件吗？</span>
+              <svg class="faq-icon w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+            <div class="faq-content px-6 pb-5">
+              <p class="text-[#737373]">
+                出于安全和反垃圾邮件的考虑，TempMail Pro 仅支持接收邮件功能。临时邮箱的设计初衷是保护您的真实邮箱地址不被泄露，而非作为常规通讯工具使用。
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ Item 5 -->
+          <div class="faq-item rounded-xl overflow-hidden reveal" role="listitem">
+            <button class="faq-button w-full px-6 py-5 flex items-center justify-between text-left" aria-expanded="false">
+              <span class="font-semibold text-lg">为什么有些网站拒绝临时邮箱？</span>
+              <svg class="faq-icon w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+            <div class="faq-content px-6 pb-5">
+              <p class="text-[#737373]">
+                部分网站会维护一个已知临时邮箱域名黑名单。TempMail Pro 提供 150+ 个不同的域名选择，专业版用户可以使用更接近真实邮箱的域名格式，大大降低被拒绝的概率。我们的域名库每周更新，确保最大兼容性。
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ Item 6 -->
+          <div class="faq-item rounded-xl overflow-hidden reveal" role="listitem">
+            <button class="faq-button w-full px-6 py-5 flex items-center justify-between text-left" aria-expanded="false">
+              <span class="font-semibold text-lg">如何升级到专业版？</span>
+              <svg class="faq-icon w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+            <div class="faq-content px-6 pb-5">
+              <p class="text-[#737373]">
+                点击页面上方的"升级专业版"按钮，按照提示完成支付即可。我们支持信用卡、PayPal 和加密货币支付。专业版订阅可随时取消，剩余时间仍可使用至周期结束。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 md:py-28" aria-labelledby="cta-heading">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="relative rounded-3xl overflow-hidden reveal">
+          <!-- Background -->
+          <div class="absolute inset-0 bg-gradient-to-br from-[#00d9a5]/20 via-[#0a0a0a] to-[#0a0a0a]"></div>
+          <div class="absolute top-0 right-0 w-64 h-64 bg-[#00d9a5]/10 rounded-full blur-3xl"></div>
+          
+          <!-- Content -->
+          <div class="relative px-6 py-16 sm:px-12 sm:py-20 text-center">
+            <h2 id="cta-heading" class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
+              准备好保护您的隐私了吗？
+            </h2>
+            <p class="text-lg text-[#737373] mb-10 max-w-2xl mx-auto">
+              加入超过 200 万用户的行列，立即开始使用 TempMail Pro 保护您的真实邮箱地址
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <button class="btn-primary px-8 py-4 rounded-xl text-lg">免费开始使用</button>
+              <button class="btn-secondary px-8 py-4 rounded-xl text-lg">了解更多</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-[#2a2a2a] py-12 md:py-16" role="contentinfo">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
+        <!-- Brand -->
+        <div class="col-span-2 lg:col-span-1">
+          <a href="#" class="flex items-center gap-2 mb-4" aria-label="TempMail Pro 首页">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00d9a5] to-[#00a67d] flex items-center justify-center">
+              <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <span class="text-xl font-bold tracking-tight">TempMail<span class="text-[#00d9a5]">Pro</span></span>
+          </a>
+          <p class="text-sm text-[#737373] mb-4">
+            安全、私密、免费的临时邮箱服务
+          </p>
+          <div class="flex gap-4">
+            <a href="#" class="text-[#737373] hover:text-[#00d9a5] transition-colors" aria-label="Twitter">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"/>
+              </svg>
+            </a>
+            <a href="#" class="text-[#737373] hover:text-[#00d9a5] transition-colors" aria-label="GitHub">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Product -->
+        <div>
+          <h3 class="font-semibold mb-4">产品</h3>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-sm text-[#737373] hover:text-white transition-colors">功能介绍</a></li>
+            <li><a href="#" class="text-sm text-[#737373] hover:text-white transition-colors">定价方案</a></li>
+            <li><a href="#" class="text-sm text-[#737373] hover:text-white transition-colors">API 文档</a></li>
+            <li><a href="#" class="text-sm text-[#737373] hover:text-white transition-colors">更新日志</a></li>
+          </ul>
+        </div>
+
+        <!-- Resources -->
+        <div>
+          <h3 class="font-semibold mb-4">资源</h3>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-sm text-[#737373] hover:text-white transition-colors">帮助中心</a></li>
+            <li><a href="#" class="text-sm text-[#737373] hover:text-white transition-colors">博客</a></li>
+            <li><a href="#" class="text-sm text-[#737373] hover:text-white transition-colors">开发者</a></li>
+            <li><a href="#" class="text-sm text-[#737373] hover:text-white transition-colors">状态页面</a></li>
+          </ul>
+        </div>
+
+        <!-- Company -->
+        <div>
+          <h3 class="font-semibold mb-4">公司</h3>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-sm text-[#737373] hover:text-white transition-colors">关于我们</a></li>
+            <li><a href="#" class="text-sm text-[#737373] hover:text-white transition-colors">联系我们</a></li>
+            <li><a href="#" class="text-sm text-[#737373] hover:text-white transition-colors">隐私政策</a></li>
+            <li><a href="#" class="text-sm text-[#737373] hover:text-white transition-colors">服务条款</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bottom -->
+      <div class="pt-8 border-t border-[#2a2a2a] flex flex-col sm:flex-row justify-between items-center gap-4">
+        <p class="text-sm text-[#737373]">
+          2024 TempMail Pro. All rights reserved.
+        </p>
+        <div class="flex items-center gap-6">
+          <a href="#" class="text-sm text-[#737373] hover:text-white transition-colors">隐私政策</a>
+          <a href="#" class="text-sm text-[#737373] hover:text-white transition-colors">服务条款</a>
+          <a href="#" class="text-sm text-[#737373] hover:text-white transition-colors">Cookie 设置</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize elements
+    const navbar = document.getElementById('navbar');
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const closeMenuBtn = document.getElementById('close-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const copyBtn = document.getElementById('copy-btn');
+    const refreshEmailBtn = document.getElementById('refresh-email-btn');
+    const emailDisplay = document.getElementById('email-display');
+    const toast = document.getElementById('toast');
+    const faqItems = document.querySelectorAll('.faq-item');
+
+    // Email domains for random generation
+    const domains = ['tempmail.pro', 'quickmail.io', 'fastmail.temp', 'securemail.dev', 'privacymail.app'];
+    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+
+    // Generate random email
+    function generateRandomEmail() {
+      let localPart = '';
+      for (let i = 0; i < 10; i++) {
+        localPart += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      const domain = domains[Math.floor(Math.random() * domains.length)];
+      return `${localPart}@${domain}`;
+    }
+
+    // Navbar scroll effect
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      
+      if (currentScroll > 50) {
+        navbar.classList.add('nav-scrolled');
+      } else {
+        navbar.classList.remove('nav-scrolled');
+      }
+      
+      lastScroll = currentScroll;
+    });
+
+    // Mobile menu toggle
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.add('open');
+      mobileMenu.setAttribute('aria-hidden', 'false');
+      mobileMenuBtn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    });
+
+    closeMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      mobileMenuBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    });
+
+    // Close mobile menu on link click
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      });
+    });
+
+    // Copy email to clipboard
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(emailDisplay.textContent);
+        showToast();
+      } catch (err) {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = emailDisplay.textContent;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showToast();
+      }
+    });
+
+    // Show toast notification
+    function showToast() {
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+
+    // Refresh email
+    refreshEmailBtn.addEventListener('click', () => {
+      emailDisplay.textContent = generateRandomEmail();
+      refreshEmailBtn.querySelector('svg').style.transform = 'rotate(360deg)';
+      setTimeout(() => {
+        refreshEmailBtn.querySelector('svg').style.transform = '';
+      }, 300);
+    });
+
+    // FAQ Accordion
+    faqItems.forEach(item => {
+      const button = item.querySelector('.faq-button');
+      const content = item.querySelector('.faq-content');
+      
+      button.addEventListener('click', () => {
+        const isOpen = item.classList.contains('open');
+        
+        // Close all other items
+        faqItems.forEach(otherItem => {
+          otherItem.classList.remove('open');
+          otherItem.querySelector('.faq-content').classList.remove('open');
+          otherItem.querySelector('.faq-button').setAttribute('aria-expanded', 'false');
+        });
+        
+        // Toggle current item
+        if (!isOpen) {
+          item.classList.add('open');
+          content.classList.add('open');
+          button.setAttribute('aria-expanded', 'true');
+        }
+      });
+
+      // Keyboard support
+      button.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          button.click();
+        }
+      });
+    });
+
+    // Scroll reveal animation
+    const revealElements = document.querySelectorAll('.reveal');
+    
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, index * 100);
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    // Counter animation
+    const statNumbers = document.querySelectorAll('.stat-number');
+    
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const target = parseFloat(entry.target.dataset.target);
+          animateCounter(entry.target, target);
+          counterObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    statNumbers.forEach(el => counterObserver.observe(el));
+
+    function animateCounter(element, target) {
+      const duration = 2000;
+      const startTime = performance.now();
+      const isDecimal = target % 1 !== 0;
+      
+      function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        const current = target * easeOutQuart;
+        
+        if (target >= 1000000) {
+          element.textContent = (current / 1000000).toFixed(1) + 'M+';
+        } else if (target >= 1000) {
+          element.textContent = Math.floor(current / 1000) + 'K+';
+        } else if (isDecimal) {
+          element.textContent = current.toFixed(1);
+        } else {
+          element.textContent = Math.floor(current) + '+';
+        }
+        
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        }
+      }
+      
+      requestAnimationFrame(update);
+    }
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href !== '#') {
+          e.preventDefault();
+          const target = document.querySelector(href);
+          if (target) {
+            const offsetTop = target.offsetTop - 80;
+            window.scrollTo({
+              top: offsetTop,
+              behavior: 'smooth'
+            });
+          }
+        }
+      });
+    });
+
+    // Keyboard navigation for mobile menu
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+        mobileMenu.classList.remove('open');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+        mobileMenuBtn.focus();
+      }
+    });
+  </script>
+</body>
+</html>
