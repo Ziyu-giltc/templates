@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillSync - Team Projects Made Simple</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Space Grotesk', 'sans-serif'],
+                        body: ['DM Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            200: '#99f6e4',
+                            300: '#5eead4',
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                        },
+                        surface: {
+                            50: '#fafaf9',
+                            100: '#f5f5f4',
+                            200: '#e7e5e4',
+                            800: '#1c1917',
+                            900: '#0c0a09',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --bg: #fafaf9;
+            --fg: #1c1917;
+            --muted: #57534e;
+            --accent: #0d9488;
+            --accent-light: #14b8a6;
+            --card: #ffffff;
+            --border: #e7e5e4;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Hero gradient mesh */
+        .hero-bg {
+            background: 
+                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(20, 184, 166, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 20%, rgba(13, 148, 136, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse 50% 30% at 50% 80%, rgba(45, 212, 191, 0.08) 0%, transparent 50%),
+                linear-gradient(180deg, #fafaf9 0%, #f5f5f4 100%);
+        }
+
+        /* Floating orbs */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #14b8a6 0%, #2dd4bf 100%);
+            top: 10%;
+            left: 5%;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+            top: 60%;
+            right: 10%;
+            animation: float 15s ease-in-out infinite reverse;
+        }
+
+        .orb-3 {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #5eead4 0%, #14b8a6 100%);
+            bottom: 20%;
+            left: 30%;
+            animation: float 18s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(20px, -30px) scale(1.05); }
+            50% { transform: translate(-10px, 20px) scale(0.95); }
+            75% { transform: translate(30px, 10px) scale(1.02); }
+        }
+
+        /* Reveal animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+        .reveal-delay-5 { transition-delay: 0.5s; }
+        .reveal-delay-6 { transition-delay: 0.6s; }
+
+        /* Button styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.75rem;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+            color: white;
+            box-shadow: 0 4px 14px -3px rgba(13, 148, 136, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px -5px rgba(13, 148, 136, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--fg);
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .btn-secondary:hover {
+            background: #f5f5f4;
+            border-color: #d6d3d1;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--fg);
+        }
+
+        .btn-ghost:hover {
+            background: rgba(0,0,0,0.05);
+        }
+
+        /* Card styles */
+        .card {
+            background: white;
+            border-radius: 1rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: #d6d3d1;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-4px);
+        }
+
+        /* Feature card icons */
+        .feature-icon {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+            color: #0d9488;
+        }
+
+        /* Pricing popular badge */
+        .popular-badge {
+            position: absolute;
+            top: -0.75rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+            color: white;
+            padding: 0.25rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.025em;
+        }
+
+        /* Nav styles */
+        .nav-link {
+            position: relative;
+            color: #57534e;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--fg);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -0.25rem;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* FAQ accordion */
+        .faq-question {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            font-size: 1.0625rem;
+            font-weight: 600;
+            color: var(--fg);
+        }
+
+        .faq-question:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .faq-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .faq-item.open .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 200px;
+            padding-bottom: 1.25rem;
+        }
+
+        /* Testimonial card */
+        .testimonial-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            min-width: 300px;
+            flex-shrink: 0;
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            max-width: 320px;
+            height: 100vh;
+            background: white;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 100;
+            padding: 2rem;
+            box-shadow: -10px 0 40px rgba(0,0,0,0.1);
+        }
+
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+
+        .menu-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 99;
+        }
+
+        .menu-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Stat counter animation */
+        .stat-number {
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Trust logos */
+        .trust-logo {
+            height: 2rem;
+            opacity: 0.5;
+            filter: grayscale(100%);
+            transition: all 0.3s ease;
+        }
+
+        .trust-logo:hover {
+            opacity: 0.8;
+            filter: grayscale(0%);
+        }
+
+        /* Skip link */
+        .skip-link {
+            position: absolute;
+            top: -100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0 0 0.5rem 0.5rem;
+            z-index: 1000;
+            transition: top 0.3s;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-stone-200/50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" role="navigation" aria-label="Main navigation">
+            <div class="flex items-center justify-between h-16 lg:h-20">
+                <!-- Logo -->
+                <a href="#top" class="font-display text-xl sm:text-2xl font-bold text-stone-900 flex items-center gap-2">
+                    <svg class="w-8 h-8 text-brand-600" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                        <rect x="2" y="2" width="12" height="12" rx="2" fill="currentColor"/>
+                        <rect x="18" y="2" width="12" height="12" rx="2" fill="currentColor" opacity="0.5"/>
+                        <rect x="2" y="18" width="12" height="12" rx="2" fill="currentColor" opacity="0.3"/>
+                        <rect x="18" y="18" width="12" height="12" rx="2" fill="currentColor" opacity="0.7"/>
+                    </svg>
+                    SkillSync
+                </a>
+
+                <!-- Desktop Nav -->
+                <div class="hidden lg:flex items-center gap-8">
+                    <a href="#features" class="nav-link">Features</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#pricing" class="nav-link">Pricing</a>
+                    <a href="#testimonials" class="nav-link">Testimonials</a>
+                    <a href="#faq" class="nav-link">FAQ</a>
+                </div>
+
+                <!-- CTA -->
+                <div class="hidden lg:flex items-center gap-3">
+                    <button class="btn btn-ghost">Sign In</button>
+                    <button class="btn btn-primary">Start Free Trial</button>
+                </div>
+
+                <!-- Mobile menu button -->
+                <button class="lg:hidden p-2 -mr-2" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay" aria-hidden="true"></div>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Mobile navigation">
+        <button class="absolute top-4 right-4 p-2" id="closeMenuBtn" aria-label="Close menu">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+        <div class="flex flex-col gap-6 mt-12">
+            <a href="#features" class="text-lg font-medium">Features</a>
+            <a href="#about" class="text-lg font-medium">About</a>
+            <a href="#pricing" class="text-lg font-medium">Pricing</a>
+            <a href="#testimonials" class="text-lg font-medium">Testimonials</a>
+            <a href="#faq" class="text-lg font-medium">FAQ</a>
+            <hr class="border-stone-200 my-2">
+            <button class="btn btn-secondary w-full">Sign In</button>
+            <button class="btn btn-primary w-full">Start Free Trial</button>
+        </div>
+    </div>
+
+    <main id="main">
+        <!-- Hero Section -->
+        <section id="top" class="hero-bg relative overflow-hidden pt-24 lg:pt-32 pb-16 lg:pb-24">
+            <div class="orb orb-1" aria-hidden="true"></div>
+            <div class="orb orb-2" aria-hidden="true"></div>
+            <div class="orb orb-3" aria-hidden="true"></div>
+            
+            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-4xl mx-auto text-center">
+                    <!-- Announcement badge -->
+                    <div class="reveal inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-brand-200 rounded-full px-4 py-1.5 mb-6 text-sm">
+                        <span class="w-2 h-2 bg-brand-500 rounded-full animate-pulse" aria-hidden="true"></span>
+                        <span class="text-brand-700 font-medium">New: AI-powered task suggestions now available</span>
+                    </div>
+
+                    <h1 class="reveal reveal-delay-1 font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-stone-900 mb-6 leading-[1.1]">
+                        Team Projects,<br class="hidden sm:block">
+                        <span class="text-brand-600">Finally Organized</span>
+                    </h1>
+                    
+                    <p class="reveal reveal-delay-2 text-lg sm:text-xl text-stone-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+                        SkillSync brings tasks, documents, and team updates into one unified workspace. Stop juggling multiple tools and start shipping faster.
+                    </p>
+
+                    <div class="reveal reveal-delay-3 flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+                        <button class="btn btn-primary text-base px-8 py-4 w-full sm:w-auto">
+                            Start Free Trial
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                            </svg>
+                        </button>
+                        <button class="btn btn-secondary text-base px-8 py-4 w-full sm:w-auto">
+                            Contact Sales
+                        </button>
+                    </div>
+
+                    <p class="reveal reveal-delay-4 text-sm text-stone-500 mb-8">
+                        No credit card required. 14-day free trial.
+                    </p>
+
+                    <!-- Trust metrics -->
+                    <div class="reveal reveal-delay-5 flex flex-wrap items-center justify-center gap-8 sm:gap-12">
+                        <div class="text-center">
+                            <div class="font-display text-2xl sm:text-3xl font-bold text-stone-900 stat-number" data-target="10000">10,000+</div>
+                            <div class="text-sm text-stone-500">Teams</div>
+                        </div>
+                        <div class="w-px h-10 bg-stone-200 hidden sm:block" aria-hidden="true"></div>
+                        <div class="text-center">
+                            <div class="font-display text-2xl sm:text-3xl font-bold text-stone-900">38</div>
+                            <div class="text-sm text-stone-500">Countries</div>
+                        </div>
+                        <div class="w-px h-10 bg-stone-200 hidden sm:block" aria-hidden="true"></div>
+                        <div class="text-center">
+                            <div class="font-display text-2xl sm:text-3xl font-bold text-stone-900">4.9</div>
+                            <div class="text-sm text-stone-500 flex items-center justify-center gap-1">
+                                <svg class="w-4 h-4 text-amber-400 fill-current" viewBox="0 0 20 20" aria-hidden="true">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                                Rating
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero visual -->
+                <div class="reveal reveal-delay-6 mt-16 lg:mt-20 relative">
+                    <div class="relative mx-auto max-w-5xl">
+                        <div class="absolute inset-0 bg-gradient-to-t from-stone-50 via-transparent to-transparent z-10 pointer-events-none" aria-hidden="true"></div>
+                        <div class="bg-white rounded-2xl shadow-2xl shadow-stone-900/10 border border-stone-200 overflow-hidden">
+                            <div class="bg-stone-100 px-4 py-3 flex items-center gap-2 border-b border-stone-200">
+                                <div class="w-3 h-3 rounded-full bg-red-400" aria-hidden="true"></div>
+                                <div class="w-3 h-3 rounded-full bg-amber-400" aria-hidden="true"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-400" aria-hidden="true"></div>
+                            </div>
+                            <div class="p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-stone-50 to-white">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <!-- Task column -->
+                                    <div class="bg-white rounded-xl p-4 border border-stone-200">
+                                        <h3 class="font-semibold text-stone-700 mb-3 flex items-center gap-2">
+                                            <span class="w-2 h-2 rounded-full bg-brand-500" aria-hidden="true"></span>
+                                            In Progress
+                                        </h3>
+                                        <div class="space-y-2">
+                                            <div class="bg-stone-50 rounded-lg p-3 text-sm">Design review</div>
+                                            <div class="bg-stone-50 rounded-lg p-3 text-sm">API integration</div>
+                                            <div class="bg-brand-50 border border-brand-200 rounded-lg p-3 text-sm text-brand-700">User testing</div>
+                                        </div>
+                                    </div>
+                                    <!-- Doc column -->
+                                    <div class="bg-white rounded-xl p-4 border border-stone-200">
+                                        <h3 class="font-semibold text-stone-700 mb-3 flex items-center gap-2">
+                                            <span class="w-2 h-2 rounded-full bg-amber-500" aria-hidden="true"></span>
+                                            Documents
+                                        </h3>
+                                        <div class="space-y-2">
+                                            <div class="bg-stone-50 rounded-lg p-3 text-sm">Product specs</div>
+                                            <div class="bg-stone-50 rounded-lg p-3 text-sm">Brand guidelines</div>
+                                            <div class="bg-stone-50 rounded-lg p-3 text-sm">Sprint notes</div>
+                                        </div>
+                                    </div>
+                                    <!-- Team column -->
+                                    <div class="bg-white rounded-xl p-4 border border-stone-200">
+                                        <h3 class="font-semibold text-stone-700 mb-3 flex items-center gap-2">
+                                            <span class="w-2 h-2 rounded-full bg-green-500" aria-hidden="true"></span>
+                                            Team Updates
+                                        </h3>
+                                        <div class="space-y-2">
+                                            <div class="bg-stone-50 rounded-lg p-3 text-sm text-stone-600">
+                                                <span class="font-medium text-stone-800">Sarah:</span> Deployed v2.1
+                                            </div>
+                                            <div class="bg-stone-50 rounded-lg p-3 text-sm text-stone-600">
+                                                <span class="font-medium text-stone-800">Mike:</span> PR approved
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trust Strip -->
+        <section class="py-12 border-y border-stone-200 bg-white" aria-labelledby="trust-heading">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <p id="trust-heading" class="text-center text-sm text-stone-500 mb-8">Trusted by teams at</p>
+                <div class="flex flex-wrap items-center justify-center gap-8 sm:gap-12 lg:gap-16 opacity-60">
+                    <svg class="h-6 sm:h-7" viewBox="0 0 120 30" fill="currentColor" aria-hidden="true">
+                        <text x="0" y="22" font-family="Space Grotesk, sans-serif" font-weight="600" font-size="18">Acme Inc</text>
+                    </svg>
+                    <svg class="h-6 sm:h-7" viewBox="0 0 120 30" fill="currentColor" aria-hidden="true">
+                        <text x="0" y="22" font-family="Space Grotesk, sans-serif" font-weight="600" font-size="18">TechFlow</text>
+                    </svg>
+                    <svg class="h-6 sm:h-7" viewBox="0 0 120 30" fill="currentColor" aria-hidden="true">
+                        <text x="0" y="22" font-family="Space Grotesk, sans-serif" font-weight="600" font-size="18">DataPro</text>
+                    </svg>
+                    <svg class="h-6 sm:h-7" viewBox="0 0 120 30" fill="currentColor" aria-hidden="true">
+                        <text x="0" y="22" font-family="Space Grotesk, sans-serif" font-weight="600" font-size="18">CloudBase</text>
+                    </svg>
+                    <svg class="h-6 sm:h-7" viewBox="0 0 120 30" fill="currentColor" aria-hidden="true">
+                        <text x="0" y="22" font-family="Space Grotesk, sans-serif" font-weight="600" font-size="18">ScaleUp</text>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="py-20 lg:py-28 bg-white" aria-labelledby="features-heading">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 id="features-heading" class="reveal font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-stone-900 mb-4">
+                        Everything your team needs
+                    </h2>
+                    <p class="reveal reveal-delay-1 text-lg text-stone-600 max-w-2xl mx-auto">
+                        A complete toolkit for modern teams. No more switching between apps or losing context.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                    <!-- Feature 1 -->
+                    <article class="reveal card p-6 lg:p-8">
+                        <div class="feature-icon mb-4" aria-hidden="true">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-display text-xl font-semibold text-stone-900 mb-2">Task Boards</h3>
+                        <p class="text-stone-600">Create tasks, assign owners, set due dates, and track progress across customizable workflows.</p>
+                    </article>
+
+                    <!-- Feature 2 -->
+                    <article class="reveal reveal-delay-1 card p-6 lg:p-8">
+                        <div class="feature-icon mb-4" aria-hidden="true">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-display text-xl font-semibold text-stone-900 mb-2">Shared Docs</h3>
+                        <p class="text-stone-600">Write project notes, specifications, and guides in a collaborative workspace with real-time editing.</p>
+                    </article>
+
+                    <!-- Feature 3 -->
+                    <article class="reveal reveal-delay-2 card p-6 lg:p-8">
+                        <div class="feature-icon mb-4" aria-hidden="true">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-display text-xl font-semibold text-stone-900 mb-2">Team Chat</h3>
+                        <p class="text-stone-600">Direct messages and channel updates with searchable history keep everyone aligned.</p>
+                    </article>
+
+                    <!-- Feature 4 -->
+                    <article class="reveal card p-6 lg:p-8">
+                        <div class="feature-icon mb-4" aria-hidden="true">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-display text-xl font-semibold text-stone-900 mb-2">Reports</h3>
+                        <p class="text-stone-600">Visual dashboards with weekly status summaries and workload charts for better planning.</p>
+                    </article>
+
+                    <!-- Feature 5 -->
+                    <article class="reveal reveal-delay-1 card p-6 lg:p-8">
+                        <div class="feature-icon mb-4" aria-hidden="true">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-display text-xl font-semibold text-stone-900 mb-2">Automations</h3>
+                        <p class="text-stone-600">Set rules for automatic reminders, overdue alerts, and recurring tasks to save time.</p>
+                    </article>
+
+                    <!-- Feature 6 -->
+                    <article class="reveal reveal-delay-2 card p-6 lg:p-8">
+                        <div class="feature-icon mb-4" aria-hidden="true">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-display text-xl font-semibold text-stone-900 mb-2">Permissions</h3>
+                        <p class="text-stone-600">Granular access controls for employees, contractors, and guests with audit logs.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-20 lg:py-28 bg-gradient-to-b from-stone-50 to-white" aria-labelledby="about-heading">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                    <div>
+                        <h2 id="about-heading" class="reveal font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-stone-900 mb-6">
+                            Built by teams, for teams
+                        </h2>
+                        <div class="reveal reveal-delay-1 space-y-4 text-lg text-stone-600">
+                            <p>
+                                SkillSync started as an internal tool to solve our own coordination headaches. We were tired of context-switching between five different apps just to understand project status.
+                            </p>
+                            <p>
+                                After iterating based on real team feedback, we expanded into a full product. Today, SkillSync helps over 10,000 teams across 38 countries work more efficiently without the complexity of enterprise tools.
+                            </p>
+                            <p>
+                                Our mission: give teams a workspace that's powerful enough to be useful but simple enough to adopt on day one.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="reveal reveal-delay-2">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="card p-6 text-center">
+                                <div class="font-display text-4xl font-bold text-brand-600 mb-1">2021</div>
+                                <div class="text-sm text-stone-500">Founded</div>
+                            </div>
+                            <div class="card p-6 text-center">
+                                <div class="font-display text-4xl font-bold text-brand-600 mb-1">10K+</div>
+                                <div class="text-sm text-stone-500">Customers</div>
+                            </div>
+                            <div class="card p-6 text-center">
+                                <div class="font-display text-4xl font-bold text-brand-600 mb-1">38</div>
+                                <div class="text-sm text-stone-500">Countries</div>
+                            </div>
+                            <div class="card p-6 text-center">
+                                <div class="font-display text-4xl font-bold text-brand-600 mb-1">5</div>
+                                <div class="text-sm text-stone-500">Day Rollout</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="py-20 lg:py-28 bg-white" aria-labelledby="pricing-heading">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 id="pricing-heading" class="reveal font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-stone-900 mb-4">
+                        Simple, transparent pricing
+                    </h2>
+                    <p class="reveal reveal-delay-1 text-lg text-stone-600 max-w-2xl mx-auto">
+                        Choose the plan that fits your team. All plans include a 14-day free trial.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">
+                    <!-- Starter -->
+                    <article class="reveal card p-6 lg:p-8 flex flex-col">
+                        <h3 class="font-display text-xl font-semibold text-stone-900 mb-2">Starter</h3>
+                        <p class="text-stone-500 text-sm mb-4">For small teams getting started</p>
+                        <div class="mb-6">
+                            <span class="font-display text-5xl font-bold text-stone-900">$12</span>
+                            <span class="text-stone-500">/user/mo</span>
+                        </div>
+                        <ul class="space-y-3 mb-8 flex-grow" role="list">
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                <span class="text-stone-600">Up to 15 users</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                <span class="text-stone-600">Task boards and docs</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                <span class="text-stone-600">Email support</span>
+                            </li>
+                        </ul>
+                        <button class="btn btn-secondary w-full">Get Started</button>
+                    </article>
+
+                    <!-- Growth (Popular) -->
+                    <article class="reveal reveal-delay-1 card p-6 lg:p-8 flex flex-col relative border-brand-300 bg-brand-50/30">
+                        <div class="popular-badge">Most Popular</div>
+                        <h3 class="font-display text-xl font-semibold text-stone-900 mb-2">Growth</h3>
+                        <p class="text-stone-500 text-sm mb-4">For growing organizations</p>
+                        <div class="mb-6">
+                            <span class="font-display text-5xl font-bold text-stone-900">$29</span>
+                            <span class="text-stone-500">/user/mo</span>
+                        </div>
+                        <ul class="space-y-3 mb-8 flex-grow" role="list">
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-brand-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                <span class="text-stone-600">Unlimited users</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-brand-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                <span class="text-stone-600">Automation rules</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-brand-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                <span class="text-stone-600">Priority support</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-brand-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                <span class="text-stone-600">Guided onboarding</span>
+                            </li>
+                        </ul>
+                        <button class="btn btn-primary w-full">Get Started</button>
+                    </article>
+
+                    <!-- Enterprise -->
+                    <article class="reveal reveal-delay-2 card p-6 lg:p-8 flex flex-col">
+                        <h3 class="font-display text-xl font-semibold text-stone-900 mb-2">Enterprise</h3>
+                        <p class="text-stone-500 text-sm mb-4">For large organizations</p>
+                        <div class="mb-6">
+                            <span class="font-display text-5xl font-bold text-stone-900">$59</span>
+                            <span class="text-stone-500">/user/mo</span>
+                        </div>
+                        <ul class="space-y-3 mb-8 flex-grow" role="list">
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                <span class="text-stone-600">Advanced permissions</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                <span class="text-stone-600">Security controls</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                <span class="text-stone-600">Dedicated manager</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                <span class="text-stone-600">Custom integrations</span>
+                            </li>
+                        </ul>
+                        <button class="btn btn-secondary w-full">Contact Sales</button>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="py-20 lg:py-28 bg-stone-50" aria-labelledby="testimonials-heading">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 id="testimonials-heading" class="reveal font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-stone-900 mb-4">
+                        What teams are saying
+                    </h2>
+                    <p class="reveal reveal-delay-1 text-lg text-stone-600 max-w-2xl mx-auto">
+                        Join thousands of teams already using SkillSync to work smarter.
+                    </p>
+                </div>
+
+                <div class="reveal reveal-delay-2 flex gap-6 overflow-x-auto pb-4 -mx-4 px-4 snap-x snap-mandatory scrollbar-hide" id="testimonialSlider" role="list">
+                    <blockquote class="testimonial-card snap-start" role="listitem">
+                        <div class="flex items-center gap-1 mb-3" aria-label="5 out of 5 stars">
+                            <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                            <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                            <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                            <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                            <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        </div>
+                        <p class="text-stone-700 mb-4">"SkillSync made our weekly planning meetings much shorter and clearer. We've cut meeting time by 40%."</p>
+                        <footer class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center font-semibold text-brand-700" aria-hidden="true">JT</div>
+                            <div>
+                                <cite class="not-italic font-semibold text-stone-900">Jamie T.</cite>
+                                <p class="text-sm text-stone-500">Product Lead</p>
+                            </div>
+                        </footer>
+                    </blockquote>
+
+                    <blockquote class="testimonial-card snap-start" role="listitem">
+                        <div class="flex items-center gap-1 mb-3" aria-label="5 out of 5 stars">
+                            <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                            <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                            <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                            <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                            <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        </div>
+                        <p class="text-stone-700 mb-4">"The shared docs and task boards replaced three separate tools for us. Our tech stack is finally manageable."</p>
+                        <footer class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center font-semibold text-brand-700" aria-hidden="true">MR</div>
+                            <div>
+                                <cite class="not-italic font-semibold text-stone-900">Morgan R.</cite>
+                                <p class="text-sm text-stone-500">Operations Manager</p>
+                            </div>
+                        </footer>
+                    </blockquote>
+
+                    <blockquote class="testimonial-card snap-start" role="listitem">
+                        <div class="flex items-center gap-1 mb-3" aria-label="5 out of 5 stars">
+                            <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                            <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                            <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                            <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                            <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        </div>
+                        <p class="text-stone-700 mb-4">"Setup was fast and the team started using it on day one. No lengthy onboarding needed."</p>
+                        <footer class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center font-semibold text-brand-700" aria-hidden="true">AP</div>
+                            <div>
+                                <cite class="not-italic font-semibold text-stone-900">Alex P.</cite>
+                                <p class="text-sm text-stone-500">Support Director</p>
+                            </div>
+                        </footer>
+                    </blockquote>
+
+                    <blockquote class="testimonial-card snap-start" role="listitem">
+                        <div class="flex items-center gap-1 mb-3" aria-label="5 out of 5 stars">
+                            <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                            <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                            <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                            <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                            <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        </div>
+                        <p class="text-stone-700 mb-4">"The reporting features gave leadership a much better view of capacity. We finally have visibility into team workload."</p>
+                        <footer class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center font-semibold text-brand-700" aria-hidden="true">DK</div>
+                            <div>
+                                <cite class="not-italic font-semibold text-stone-900">Dana K.</cite>
+                                <p class="text-sm text-stone-500">PMO Lead</p>
+                            </div>
+                        </footer>
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="py-20 lg:py-28 bg-white" aria-labelledby="faq-heading">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 id="faq-heading" class="reveal font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-stone-900 mb-4">
+                        Frequently asked questions
+                    </h2>
+                </div>
+
+                <div class="reveal reveal-delay-1 space-y-4" role="list">
+                    <article class="faq-item border-b border-stone-200" role="listitem">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>Do you offer a free trial?</span>
+                            <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                            </svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p class="text-stone-600">Yes. All plans include a 14-day free trial with no credit card required. You can explore all features before committing.</p>
+                        </div>
+                    </article>
+
+                    <article class="faq-item border-b border-stone-200" role="listitem">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>Can we migrate data from another tool?</span>
+                            <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                            </svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p class="text-stone-600">Yes. CSV imports are supported for projects, tasks, and team members. Our support team can also assist with larger migrations.</p>
+                        </div>
+                    </article>
+
+                    <article class="faq-item border-b border-stone-200" role="listitem">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>Does SkillSync include onboarding help?</span>
+                            <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                            </svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p class="text-stone-600">Growth and Enterprise plans include guided onboarding sessions. We also have extensive documentation and video tutorials for all users.</p>
+                        </div>
+                    </article>
+
+                    <article class="faq-item border-b border-stone-200" role="listitem">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>Is there an annual contract?</span>
+                            <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                            </svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p class="text-stone-600">No contract is required. You can pay monthly or annually. Annual billing offers a 20% discount.</p>
+                        </div>
+                    </article>
+
+                    <article class="faq-item border-b border-stone-200" role="listitem">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>What integrations are available?</span>
+                            <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                            </svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p class="text-stone-600">We integrate with Slack, Google Workspace, Microsoft 365, Jira, GitHub, and 50+ other tools. Enterprise plans can request custom integrations.</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA Section -->
+        <section id="cta" class="py-20 lg:py-28 bg-gradient-to-br from-brand-600 via-brand-700 to-brand-800 relative overflow-hidden">
+            <div class="absolute inset-0 opacity-10" aria-hidden="true">
+                <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <defs>
+                        <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                            <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5"/>
+                        </pattern>
+                    </defs>
+                    <rect width="100" height="100" fill="url(#grid)"/>
+                </svg>
+            </div>
+            
+            <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="reveal font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
+                    Ready to transform how your team works?
+                </h2>
+                <p class="reveal reveal-delay-1 text-lg sm:text-xl text-brand-100 mb-8 max-w-2xl mx-auto">
+                    Join 10,000+ teams who have already simplified their workflow. Start your free trial today.
+                </p>
+                <div class="reveal reveal-delay-2 flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button class="bg-white text-brand-700 font-semibold px-8 py-4 rounded-lg hover:bg-brand-50 transition-all hover:shadow-lg hover:-translate-y-0.5 w-full sm:w-auto">
+                        Start Free Trial
+                    </button>
+                    <button class="bg-transparent text-white border-2 border-white/30 font-semibold px-8 py-4 rounded-lg hover:bg-white/10 transition-all w-full sm:w-auto">
+                        Schedule Demo
+                    </button>
+                </div>
+                <p class="reveal reveal-delay-3 text-sm text-brand-200 mt-6">
+                    No credit card required. Setup in under 5 minutes.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 text-stone-400 py-16" role="contentinfo">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
+                <!-- Brand -->
+                <div class="col-span-2 lg:col-span-1">
+                    <a href="#top" class="font-display text-xl font-bold text-white flex items-center gap-2 mb-4">
+                        <svg class="w-8 h-8 text-brand-400" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                            <rect x="2" y="2" width="12" height="12" rx="2" fill="currentColor"/>
+                            <rect x="18" y="2" width="12" height="12" rx="2" fill="currentColor" opacity="0.5"/>
+                            <rect x="2" y="18" width="12" height="12" rx="2" fill="currentColor" opacity="0.3"/>
+                            <rect x="18" y="18" width="12" height="12" rx="2" fill="currentColor" opacity="0.7"/>
+                        </svg>
+                        SkillSync
+                    </a>
+                    <p class="text-sm text-stone-500 mb-4">
+                        Team projects, finally organized.
+                    </p>
+                </div>
+
+                <!-- Product -->
+                <div>
+                    <h3 class="font-semibold text-white mb-4">Product</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#features" class="hover:text-white transition-colors">Features</a></li>
+                        <li><a href="#pricing" class="hover:text-white transition-colors">Pricing</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Integrations</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Changelog</a></li>
+                    </ul>
+                </div>
+
+                <!-- Company -->
+                <div>
+                    <h3 class="font-semibold text-white mb-4">Company</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#about" class="hover:text-white transition-colors">About</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Careers</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Press</a></li>
+                    </ul>
+                </div>
+
+                <!-- Resources -->
+                <div>
+                    <h3 class="font-semibold text-white mb-4">Resources</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition-colors">Documentation</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Help Center</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">API Reference</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Status</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal -->
+                <div>
+                    <h3 class="font-semibold text-white mb-4">Legal</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition-colors">Privacy</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Terms</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Security</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">GDPR</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-stone-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="text-sm text-stone-500">
+                    2026 SkillSync, Inc. All rights reserved.
+                </p>
+                <div class="flex items-center gap-6 text-sm">
+                    <a href="mailto:support@skillsync.example" class="hover:text-white transition-colors">support@skillsync.example</a>
+                    <a href="tel:+15550132201" class="hover:text-white transition-colors">+1 (555) 013-2201</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize all interactive features after DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu functionality
+            const menuBtn = document.getElementById('menuBtn');
+            const closeMenuBtn = document.getElementById('closeMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuOverlay = document.getElementById('menuOverlay');
+            const mobileLinks = mobileMenu ? mobileMenu.querySelectorAll('a') : [];
+
+            function openMenu() {
+                mobileMenu.classList.add('open');
+                menuOverlay.classList.add('open');
+                menuBtn.setAttribute('aria-expanded', 'true');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMenu() {
+                mobileMenu.classList.remove('open');
+                menuOverlay.classList.remove('open');
+                menuBtn.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
+            }
+
+            if (menuBtn) {
+                menuBtn.addEventListener('click', openMenu);
+            }
+            if (closeMenuBtn) {
+                closeMenuBtn.addEventListener('click', closeMenu);
+            }
+            if (menuOverlay) {
+                menuOverlay.addEventListener('click', closeMenu);
+            }
+            mobileLinks.forEach(function(link) {
+                link.addEventListener('click', closeMenu);
+            });
+
+            // FAQ accordion
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems.forEach(function(item) {
+                const question = item.querySelector('.faq-question');
+                if (question) {
+                    question.addEventListener('click', function() {
+                        const isOpen = item.classList.contains('open');
+                        
+                        // Close all other items
+                        faqItems.forEach(function(otherItem) {
+                            otherItem.classList.remove('open');
+                            const otherQuestion = otherItem.querySelector('.faq-question');
+                            if (otherQuestion) {
+                                otherQuestion.setAttribute('aria-expanded', 'false');
+                            }
+                        });
+                        
+                        // Toggle current item
+                        if (!isOpen) {
+                            item.classList.add('open');
+                            question.setAttribute('aria-expanded', 'true');
+                        }
+                    });
+                }
+            });
+
+            // Scroll reveal with IntersectionObserver
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            
+            if (!prefersReducedMotion) {
+                const revealElements = document.querySelectorAll('.reveal');
+                
+                const revealObserver = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            revealObserver.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
+                });
+
+                revealElements.forEach(function(el) {
+                    revealObserver.observe(el);
+                });
+            } else {
+                // If reduced motion is preferred, show all elements immediately
+                document.querySelectorAll('.reveal').forEach(function(el) {
+                    el.classList.add('visible');
+                });
+            }
+
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+                anchor.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href && href !== '#') {
+                        const target = document.querySelector(href);
+                        if (target) {
+                            e.preventDefault();
+                            target.scrollIntoView({
+                                behavior: prefersReducedMotion ? 'auto' : 'smooth'
+                            });
+                        }
+                    }
+                });
+            });
+
+            // Button ripple effect
+            const buttons = document.querySelectorAll('.btn-primary, .btn-secondary');
+            buttons.forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    const rect = this.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const ripple = document.createElement('span');
+                    ripple.style.cssText = 'position:absolute;background:rgba(255,255,255,0.3);border-radius:50%;transform:scale(0);animation:ripple 0.6s linear;pointer-events:none;';
+                    ripple.style.width = ripple.style.height = Math.max(rect.width, rect.height) + 'px';
+                    ripple.style.left = x - Math.max(rect.width, rect.height) / 2 + 'px';
+                    ripple.style.top = y - Math.max(rect.width, rect.height) / 2 + 'px';
+                    
+                    this.style.position = 'relative';
+                    this.style.overflow = 'hidden';
+                    this.appendChild(ripple);
+                    
+                    setTimeout(function() {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+
+            // Add ripple animation keyframes
+            const style = document.createElement('style');
+            style.textContent = '@keyframes ripple{to{transform:scale(4);opacity:0;}}';
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>
