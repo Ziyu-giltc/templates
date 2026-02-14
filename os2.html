@@ -1,0 +1,2156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Aurora OS - A beautifully crafted Linux distribution for creators, developers, and dreamers. Experience the future of desktop computing.">
+    <meta name="keywords" content="Linux, Aurora OS, Operating System, Open Source, Desktop, Developer">
+    <meta name="author" content="Aurora OS Team">
+    <meta property="og:title" content="Aurora OS - Light Up Your Digital World">
+    <meta property="og:description" content="A beautifully crafted Linux distribution for creators, developers, and dreamers.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <title>Aurora OS - Light Up Your Digital World</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0b;
+            --bg-elevated: #141416;
+            --fg: #fafafa;
+            --fg-muted: #a1a1aa;
+            --accent: #10b981;
+            --accent-soft: rgba(16, 185, 129, 0.15);
+            --accent-glow: rgba(16, 185, 129, 0.4);
+            --card: rgba(255, 255, 255, 0.03);
+            --card-hover: rgba(255, 255, 255, 0.06);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Aurora Background */
+        .aurora-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .aurora-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.5;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .aurora-blob-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, transparent 70%);
+            top: -200px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .aurora-blob-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.25) 0%, transparent 70%);
+            top: 30%;
+            right: -150px;
+            animation-delay: -5s;
+        }
+
+        .aurora-blob-3 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.2) 0%, transparent 70%);
+            bottom: 20%;
+            left: 20%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -30px) scale(1.05); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(20px, 10px) scale(1.02); }
+        }
+
+        /* Grid Pattern */
+        .grid-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Navigation */
+        .nav-blur {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(10, 10, 11, 0.8);
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: var(--accent);
+            color: var(--bg);
+            font-weight: 600;
+            padding: 14px 28px;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px -10px var(--accent-glow);
+        }
+
+        .btn-primary:hover::before {
+            opacity: 1;
+        }
+
+        .btn-primary:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .btn-secondary {
+            background: var(--card);
+            color: var(--fg);
+            font-weight: 500;
+            padding: 14px 28px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-secondary:hover {
+            background: var(--card-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        /* Cards */
+        .glass-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            background: var(--card-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-4px);
+        }
+
+        /* Scroll Reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        /* Comparison Table */
+        .comparison-table {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table thead th {
+            background: var(--bg-elevated);
+            font-weight: 600;
+            text-align: left;
+        }
+
+        .comparison-table tbody tr {
+            transition: background 0.2s;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--card);
+        }
+
+        /* Testimonial Cards */
+        .testimonial-card {
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            left: 24px;
+            font-size: 80px;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--accent);
+            opacity: 0.2;
+            line-height: 1;
+        }
+
+        /* Tabs */
+        .tab-btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 500;
+            color: var(--fg-muted);
+            transition: all 0.3s;
+            background: transparent;
+        }
+
+        .tab-btn:hover {
+            color: var(--fg);
+            background: var(--card);
+        }
+
+        .tab-btn.active {
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        .tab-btn:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        /* Docs Sidebar */
+        .docs-sidebar {
+            position: sticky;
+            top: 100px;
+        }
+
+        .docs-link {
+            display: block;
+            padding: 10px 16px;
+            color: var(--fg-muted);
+            border-radius: 8px;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .docs-link:hover {
+            color: var(--fg);
+            background: var(--card);
+        }
+
+        .docs-link.active {
+            color: var(--accent);
+            background: var(--accent-soft);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 12px 0;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .breadcrumb-link {
+            color: var(--fg-muted);
+            transition: color 0.2s;
+        }
+
+        .breadcrumb-link:hover {
+            color: var(--accent);
+        }
+
+        .breadcrumb-separator {
+            color: var(--border);
+        }
+
+        .breadcrumb-current {
+            color: var(--fg);
+            font-weight: 500;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: var(--bg);
+            z-index: 100;
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+
+        /* Code Block */
+        .code-block {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: var(--accent);
+            z-index: 1000;
+            transition: width 0.1s;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--fg-muted);
+        }
+
+        /* Animations */
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px var(--accent-glow); }
+            50% { box-shadow: 0 0 40px var(--accent-glow); }
+        }
+
+        .pulse-glow {
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent), #06b6d4, var(--accent));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-shift 5s ease infinite;
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            html {
+                scroll-behavior: auto;
+            }
+        }
+
+        /* Page Transitions */
+        .page {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Focus styles */
+        a:focus-visible,
+        button:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        /* Skip Link */
+        .skip-link {
+            position: absolute;
+            top: -100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: var(--bg);
+            padding: 12px 24px;
+            border-radius: 8px;
+            z-index: 10000;
+            font-weight: 600;
+        }
+
+        .skip-link:focus {
+            top: 20px;
+        }
+
+        /* Docs page layout */
+        .docs-layout {
+            display: flex;
+            gap: 3rem;
+        }
+
+        @media (max-width: 1023px) {
+            .docs-layout {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+
+    <!-- Aurora Background -->
+    <div class="aurora-bg" aria-hidden="true">
+        <div class="aurora-blob aurora-blob-1"></div>
+        <div class="aurora-blob aurora-blob-2"></div>
+        <div class="aurora-blob aurora-blob-3"></div>
+    </div>
+    <div class="grid-pattern" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <nav class="nav-blur fixed top-0 left-0 w-full z-50" role="navigation" aria-label="Main navigation">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-3" aria-label="Aurora OS Home" onclick="navigateTo('home'); return false;">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-400 flex items-center justify-center pulse-glow">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#0a0a0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 17L12 22L22 17" stroke="#0a0a0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 12L12 17L22 12" stroke="#0a0a0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <span class="text-xl font-semibold tracking-tight">Aurora OS</span>
+                </a>
+
+                <!-- Desktop Nav -->
+                <div class="hidden md:flex items-center gap-1">
+                    <button class="nav-link tab-btn" data-page="home" aria-current="page">Home</button>
+                    <button class="nav-link tab-btn" data-page="features">Features</button>
+                    <button class="nav-link tab-btn" data-page="compare">Compare</button>
+                    <button class="nav-link tab-btn" data-page="docs">Docs</button>
+                    <button class="nav-link tab-btn" data-page="download">Download</button>
+                </div>
+
+                <!-- CTA -->
+                <div class="hidden md:flex items-center gap-4">
+                    <a href="#community" class="text-sm text-zinc-400 hover:text-white transition-colors">Community</a>
+                    <a href="#" class="btn-primary text-sm">Get Started</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2 rounded-lg hover:bg-white/5 transition-colors" id="mobileMenuBtn" aria-label="Open menu" aria-expanded="false">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+        <div class="flex flex-col h-full">
+            <div class="flex items-center justify-between p-6 border-b border-white/10">
+                <span class="text-xl font-semibold">Menu</span>
+                <button class="p-2 rounded-lg hover:bg-white/5" id="closeMobileMenu" aria-label="Close menu">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="flex flex-col p-6 gap-2">
+                <button class="mobile-nav-link text-left py-3 px-4 rounded-xl hover:bg-white/5 transition-colors text-lg" data-page="home">Home</button>
+                <button class="mobile-nav-link text-left py-3 px-4 rounded-xl hover:bg-white/5 transition-colors text-lg" data-page="features">Features</button>
+                <button class="mobile-nav-link text-left py-3 px-4 rounded-xl hover:bg-white/5 transition-colors text-lg" data-page="compare">Compare</button>
+                <button class="mobile-nav-link text-left py-3 px-4 rounded-xl hover:bg-white/5 transition-colors text-lg" data-page="docs">Documentation</button>
+                <button class="mobile-nav-link text-left py-3 px-4 rounded-xl hover:bg-white/5 transition-colors text-lg" data-page="download">Download</button>
+            </div>
+            <div class="mt-auto p-6 border-t border-white/10">
+                <a href="#" class="btn-primary w-full text-center block">Download Aurora OS</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Home Page -->
+        <div id="home-page" class="page active">
+            <!-- Hero Section -->
+            <section class="relative min-h-screen flex items-center pt-20">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+                    <div class="max-w-4xl mx-auto text-center">
+                        <div class="reveal">
+                            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium mb-8">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                Aurora OS v3.2 Now Available
+                            </span>
+                        </div>
+                        
+                        <h1 class="reveal reveal-delay-1 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-tight">
+                            Light Up Your<br>
+                            <span class="gradient-text">Digital World</span>
+                        </h1>
+                        
+                        <p class="reveal reveal-delay-2 text-lg sm:text-xl text-zinc-400 max-w-2xl mx-auto mb-10">
+                            A beautifully crafted Linux distribution for creators, developers, and dreamers. 
+                            Experience the perfect blend of power, elegance, and freedom.
+                        </p>
+                        
+                        <div class="reveal reveal-delay-3 flex flex-col sm:flex-row gap-4 justify-center">
+                            <a href="#" class="btn-primary text-lg" onclick="navigateTo('download'); return false;">
+                                Download ISO
+                            </a>
+                            <a href="#" class="btn-secondary text-lg" onclick="navigateTo('docs'); return false;">
+                                Read Documentation
+                            </a>
+                        </div>
+
+                        <div class="reveal reveal-delay-4 mt-16 flex flex-wrap justify-center gap-8 text-zinc-500 text-sm">
+                            <div class="flex items-center gap-2">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-emerald-400">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                <span>2.4 GB Download</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-emerald-400">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                <span>50K+ Active Users</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-emerald-400">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
+                                <span>4.9 Star Rating</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Preview -->
+            <section class="py-20 lg:py-32 relative z-10">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="reveal text-3xl sm:text-4xl font-bold mb-4">Why Aurora OS</h2>
+                        <p class="reveal reveal-delay-1 text-zinc-400 max-w-2xl mx-auto">
+                            Built on the rock-solid Linux kernel with a desktop experience that feels familiar yet extraordinary.
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="reveal glass-card p-8">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 flex items-center justify-center mb-6">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3">Lightning Fast</h3>
+                            <p class="text-zinc-400">Boot in under 8 seconds. Launch apps instantly. Optimized for modern hardware with minimal resource usage.</p>
+                        </div>
+
+                        <div class="reveal reveal-delay-1 glass-card p-8">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 flex items-center justify-center mb-6">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="3" y1="9" x2="21" y2="9"></line>
+                                    <line x1="9" y1="21" x2="9" y2="9"></line>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3">Beautiful Desktop</h3>
+                            <p class="text-zinc-400">Custom Aurora Desktop Environment with smooth animations, intuitive gestures, and stunning visual design.</p>
+                        </div>
+
+                        <div class="reveal reveal-delay-2 glass-card p-8">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 flex items-center justify-center mb-6">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3">Privacy First</h3>
+                            <p class="text-zinc-400">No telemetry, no tracking, no data collection. Your data stays on your machine, always.</p>
+                        </div>
+
+                        <div class="reveal reveal-delay-1 glass-card p-8">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 flex items-center justify-center mb-6">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3">Developer Ready</h3>
+                            <p class="text-zinc-400">Pre-installed development tools, Docker support, and seamless integration with VS Code, JetBrains, and more.</p>
+                        </div>
+
+                        <div class="reveal reveal-delay-2 glass-card p-8">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 flex items-center justify-center mb-6">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3">App Store</h3>
+                            <p class="text-zinc-400">Access 50,000+ applications through our curated Aurora Store. Flatpak and AppImage support built-in.</p>
+                        </div>
+
+                        <div class="reveal reveal-delay-3 glass-card p-8">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 flex items-center justify-center mb-6">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3">Always Updated</h3>
+                            <p class="text-zinc-400">Atomic updates with easy rollback. Stay secure with automatic background updates that never interrupt your workflow.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Compare -->
+            <section class="py-20 lg:py-32 relative z-10 bg-gradient-to-b from-transparent via-emerald-950/10 to-transparent">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="reveal text-3xl sm:text-4xl font-bold mb-4">See the Difference</h2>
+                        <p class="reveal reveal-delay-1 text-zinc-400 max-w-2xl mx-auto">
+                            Aurora OS combines the best of all worlds. See how we stack up against the competition.
+                        </p>
+                    </div>
+
+                    <div class="reveal overflow-x-auto">
+                        <table class="comparison-table w-full min-w-[600px]">
+                            <thead>
+                                <tr>
+                                    <th class="rounded-tl-xl">Feature</th>
+                                    <th>Aurora OS</th>
+                                    <th>Windows 11</th>
+                                    <th>macOS</th>
+                                    <th class="rounded-tr-xl">ChromeOS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="font-medium">Price</td>
+                                    <td class="text-emerald-400 font-medium">Free Forever</td>
+                                    <td>$139+</td>
+                                    <td>$999+ (hardware)</td>
+                                    <td>Free / $250+</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium">Privacy</td>
+                                    <td class="text-emerald-400 font-medium">No Telemetry</td>
+                                    <td>Extensive</td>
+                                    <td>Moderate</td>
+                                    <td>High</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium">Boot Time</td>
+                                    <td class="text-emerald-400 font-medium">~8 seconds</td>
+                                    <td>~20 seconds</td>
+                                    <td>~15 seconds</td>
+                                    <td>~8 seconds</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium">RAM Usage (Idle)</td>
+                                    <td class="text-emerald-400 font-medium">~400 MB</td>
+                                    <td>~2 GB</td>
+                                    <td>~4 GB</td>
+                                    <td>~600 MB</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium">Software Library</td>
+                                    <td class="text-emerald-400 font-medium">50,000+ apps</td>
+                                    <td>Millions</td>
+                                    <td>Millions</td>
+                                    <td>Limited</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium">Gaming Support</td>
+                                    <td class="text-emerald-400 font-medium">Steam, Proton</td>
+                                    <td>Native</td>
+                                    <td>Limited</td>
+                                    <td>Cloud Only</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="reveal text-center mt-8">
+                        <button onclick="navigateTo('compare')" class="btn-secondary">
+                            View Full Comparison
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Testimonials -->
+            <section class="py-20 lg:py-32 relative z-10">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="reveal text-3xl sm:text-4xl font-bold mb-4">Loved by Thousands</h2>
+                        <p class="reveal reveal-delay-1 text-zinc-400 max-w-2xl mx-auto">
+                            Join a growing community of developers, designers, and everyday users who have made the switch.
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="reveal glass-card p-8 testimonial-card">
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-400 flex items-center justify-center text-black font-bold">
+                                    SM
+                                </div>
+                                <div>
+                                    <p class="font-semibold">Sarah Mitchell</p>
+                                    <p class="text-sm text-zinc-500">Senior Developer at Stripe</p>
+                                </div>
+                            </div>
+                            <p class="text-zinc-300 leading-relaxed">
+                                "I've tried every Linux distro out there. Aurora is the first one that just works. The development environment setup was literally zero configuration. Docker, Node, Python - everything was ready to go."
+                            </p>
+                            <div class="flex gap-1 mt-4 text-emerald-400">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            </div>
+                        </div>
+
+                        <div class="reveal reveal-delay-1 glass-card p-8 testimonial-card">
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-orange-400 flex items-center justify-center text-black font-bold">
+                                    JC
+                                </div>
+                                <div>
+                                    <p class="font-semibold">James Chen</p>
+                                    <p class="text-sm text-zinc-500">UI/UX Designer, Freelance</p>
+                                </div>
+                            </div>
+                            <p class="text-zinc-300 leading-relaxed">
+                                "As a designer, I need tools like Figma and the Adobe suite. Aurora's Flatpak support means everything runs flawlessly. Plus, the UI is gorgeous - it puts macOS to shame."
+                            </p>
+                            <div class="flex gap-1 mt-4 text-emerald-400">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            </div>
+                        </div>
+
+                        <div class="reveal reveal-delay-2 glass-card p-8 testimonial-card">
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-violet-400 to-purple-400 flex items-center justify-center text-black font-bold">
+                                    AR
+                                </div>
+                                <div>
+                                    <p class="font-semibold">Amanda Rodriguez</p>
+                                    <p class="text-sm text-zinc-500">Data Scientist, Netflix</p>
+                                </div>
+                            </div>
+                            <p class="text-zinc-300 leading-relaxed">
+                                "My workflow involves heavy ML training. Aurora's GPU drivers worked out of the box with CUDA. No more wrestling with NVIDIA drivers. It's a data scientist's dream."
+                            </p>
+                            <div class="flex gap-1 mt-4 text-emerald-400">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            </div>
+                        </div>
+
+                        <div class="reveal glass-card p-8 testimonial-card">
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-rose-400 to-pink-400 flex items-center justify-center text-black font-bold">
+                                    MK
+                                </div>
+                                <div>
+                                    <p class="font-semibold">Michael Kim</p>
+                                    <p class="text-sm text-zinc-500">DevOps Engineer, Shopify</p>
+                                </div>
+                            </div>
+                            <p class="text-zinc-300 leading-relaxed">
+                                "We've switched our entire team to Aurora. The atomic updates and easy rollback have saved us countless hours. Rollback saved my butt during a demo last week."
+                            </p>
+                            <div class="flex gap-1 mt-4 text-emerald-400">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            </div>
+                        </div>
+
+                        <div class="reveal reveal-delay-1 glass-card p-8 testimonial-card">
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-400 to-blue-400 flex items-center justify-center text-black font-bold">
+                                    EP
+                                </div>
+                                <div>
+                                    <p class="font-semibold">Emily Parker</p>
+                                    <p class="text-sm text-zinc-500">Student, Computer Science</p>
+                                </div>
+                            </div>
+                            <p class="text-zinc-300 leading-relaxed">
+                                "I installed Aurora on my 6-year-old laptop and it feels brand new. The performance boost is incredible. Finally, I can code without my fans sounding like a jet engine."
+                            </p>
+                            <div class="flex gap-1 mt-4 text-emerald-400">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            </div>
+                        </div>
+
+                        <div class="reveal reveal-delay-2 glass-card p-8 testimonial-card">
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-lime-400 to-green-400 flex items-center justify-center text-black font-bold">
+                                    DT
+                                </div>
+                                <div>
+                                    <p class="font-semibold">David Thompson</p>
+                                    <p class="text-sm text-zinc-500">Retired, Former Windows User</p>
+                                </div>
+                            </div>
+                            <p class="text-zinc-300 leading-relaxed">
+                                "I'm not a tech person. My grandson installed Aurora for me and I love it. Everything is simple, clean, and just works. No more forced updates in the middle of my video calls!"
+                            </p>
+                            <div class="flex gap-1 mt-4 text-emerald-400">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Download Section -->
+            <section class="py-20 lg:py-32 relative z-10" id="download-section">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="glass-card p-8 lg:p-16 text-center">
+                        <h2 class="reveal text-3xl sm:text-4xl font-bold mb-4">Ready to Switch?</h2>
+                        <p class="reveal reveal-delay-1 text-zinc-400 max-w-2xl mx-auto mb-10">
+                            Download Aurora OS and experience the future of desktop computing. Free forever, no strings attached.
+                        </p>
+
+                        <div class="reveal reveal-delay-2 flex flex-col sm:flex-row gap-4 justify-center mb-10">
+                            <a href="#" class="btn-primary text-lg flex items-center justify-center gap-2">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                Download ISO (2.4 GB)
+                            </a>
+                            <a href="#" class="btn-secondary text-lg flex items-center justify-center gap-2">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                                </svg>
+                                Source Code
+                            </a>
+                        </div>
+
+                        <div class="reveal reveal-delay-3 grid sm:grid-cols-3 gap-6 text-left max-w-3xl mx-auto">
+                            <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                                <p class="text-sm text-zinc-500 mb-1">Version</p>
+                                <p class="font-semibold">Aurora OS 3.2.1</p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                                <p class="text-sm text-zinc-500 mb-1">Release Date</p>
+                                <p class="font-semibold">January 15, 2025</p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                                <p class="text-sm text-zinc-500 mb-1">Checksum (SHA256)</p>
+                                <p class="font-semibold font-mono text-sm">a8f3c2...7e9d</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Community Section -->
+            <section class="py-20 lg:py-32 relative z-10" id="community">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="reveal text-3xl sm:text-4xl font-bold mb-4">Join Our Community</h2>
+                        <p class="reveal reveal-delay-1 text-zinc-400 max-w-2xl mx-auto">
+                            Connect with thousands of Aurora OS users. Get help, share tips, and contribute to the project.
+                        </p>
+                    </div>
+
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <a href="#" class="reveal glass-card p-6 flex items-center gap-4 group" target="_blank" rel="noopener noreferrer">
+                            <div class="w-12 h-12 rounded-xl bg-[#5865F2]/20 flex items-center justify-center flex-shrink-0">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="#5865F2">
+                                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold group-hover:text-emerald-400 transition-colors">Discord</p>
+                                <p class="text-sm text-zinc-500">15K+ members</p>
+                            </div>
+                        </a>
+
+                        <a href="#" class="reveal reveal-delay-1 glass-card p-6 flex items-center gap-4 group" target="_blank" rel="noopener noreferrer">
+                            <div class="w-12 h-12 rounded-xl bg-[#1DA1F2]/20 flex items-center justify-center flex-shrink-0">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="#1DA1F2">
+                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold group-hover:text-emerald-400 transition-colors">X (Twitter)</p>
+                                <p class="text-sm text-zinc-500">@auroraos_dev</p>
+                            </div>
+                        </a>
+
+                        <a href="#" class="reveal reveal-delay-2 glass-card p-6 flex items-center gap-4 group" target="_blank" rel="noopener noreferrer">
+                            <div class="w-12 h-12 rounded-xl bg-[#FF4500]/20 flex items-center justify-center flex-shrink-0">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="#FF4500">
+                                    <path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold group-hover:text-emerald-400 transition-colors">Reddit</p>
+                                <p class="text-sm text-zinc-500">r/auroraos</p>
+                            </div>
+                        </a>
+
+                        <a href="#" class="reveal reveal-delay-3 glass-card p-6 flex items-center gap-4 group" target="_blank" rel="noopener noreferrer">
+                            <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold group-hover:text-emerald-400 transition-colors">GitHub</p>
+                                <p class="text-sm text-zinc-500">aurora-os/linux</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Features Page -->
+        <div id="features-page" class="page">
+            <section class="pt-32 pb-20">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h1 class="reveal text-4xl sm:text-5xl font-bold mb-6">Powerful Features</h1>
+                        <p class="reveal reveal-delay-1 text-xl text-zinc-400 max-w-2xl mx-auto">
+                            Everything you need for a modern desktop experience, built with care and attention to detail.
+                        </p>
+                    </div>
+
+                    <div class="space-y-20">
+                        <!-- Feature 1 -->
+                        <div class="reveal grid lg:grid-cols-2 gap-12 items-center">
+                            <div>
+                                <span class="text-emerald-400 font-semibold text-sm tracking-wide uppercase">Performance</span>
+                                <h2 class="text-3xl font-bold mt-2 mb-4">Blazing Fast, Light on Resources</h2>
+                                <p class="text-zinc-400 mb-6">
+                                    Aurora OS boots in under 8 seconds and uses less than 400MB of RAM at idle. 
+                                    Our optimized kernel and efficient desktop environment ensure your hardware 
+                                    runs at its full potential.
+                                </p>
+                                <ul class="space-y-3">
+                                    <li class="flex items-center gap-3">
+                                        <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span class="text-zinc-300">Boot time under 8 seconds on SSD</span>
+                                    </li>
+                                    <li class="flex items-center gap-3">
+                                        <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span class="text-zinc-300">~400MB RAM usage at idle</span>
+                                    </li>
+                                    <li class="flex items-center gap-3">
+                                        <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span class="text-zinc-300">Runs great on hardware from 2010+</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="glass-card p-8 aspect-video flex items-center justify-center bg-gradient-to-br from-emerald-950/50 to-cyan-950/50">
+                                <div class="text-center">
+                                    <div class="text-6xl font-bold gradient-text mb-2">8s</div>
+                                    <p class="text-zinc-400">Average Boot Time</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Feature 2 -->
+                        <div class="reveal grid lg:grid-cols-2 gap-12 items-center">
+                            <div class="order-2 lg:order-1 glass-card p-8 aspect-video flex items-center justify-center bg-gradient-to-br from-cyan-950/50 to-emerald-950/50">
+                                <div class="grid grid-cols-3 gap-4">
+                                    <div class="w-16 h-16 rounded-xl bg-white/5 flex items-center justify-center">
+                                        <span class="text-2xl">VS</span>
+                                    </div>
+                                    <div class="w-16 h-16 rounded-xl bg-white/5 flex items-center justify-center">
+                                        <span class="text-2xl">PY</span>
+                                    </div>
+                                    <div class="w-16 h-16 rounded-xl bg-white/5 flex items-center justify-center">
+                                        <span class="text-2xl">GO</span>
+                                    </div>
+                                    <div class="w-16 h-16 rounded-xl bg-white/5 flex items-center justify-center">
+                                        <span class="text-2xl">RS</span>
+                                    </div>
+                                    <div class="w-16 h-16 rounded-xl bg-white/5 flex items-center justify-center">
+                                        <span class="text-2xl">JS</span>
+                                    </div>
+                                    <div class="w-16 h-16 rounded-xl bg-white/5 flex items-center justify-center">
+                                        <span class="text-2xl">+</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="order-1 lg:order-2">
+                                <span class="text-emerald-400 font-semibold text-sm tracking-wide uppercase">Development</span>
+                                <h2 class="text-3xl font-bold mt-2 mb-4">Developer Paradise</h2>
+                                <p class="text-zinc-400 mb-6">
+                                    Pre-configured development environments for every major language. 
+                                    Docker, Kubernetes, and cloud tools ready out of the box. 
+                                    No more "works on my machine" problems.
+                                </p>
+                                <ul class="space-y-3">
+                                    <li class="flex items-center gap-3">
+                                        <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span class="text-zinc-300">Python, Node.js, Go, Rust pre-installed</span>
+                                    </li>
+                                    <li class="flex items-center gap-3">
+                                        <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span class="text-zinc-300">Docker & Kubernetes built-in</span>
+                                    </li>
+                                    <li class="flex items-center gap-3">
+                                        <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span class="text-zinc-300">VS Code, JetBrains IDE support</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Feature 3 -->
+                        <div class="reveal grid lg:grid-cols-2 gap-12 items-center">
+                            <div>
+                                <span class="text-emerald-400 font-semibold text-sm tracking-wide uppercase">Security</span>
+                                <h2 class="text-3xl font-bold mt-2 mb-4">Privacy by Design</h2>
+                                <p class="text-zinc-400 mb-6">
+                                    Your data belongs to you. Aurora OS collects zero telemetry, 
+                                    includes built-in ad blocking, and offers full-disk encryption 
+                                    with a single click during installation.
+                                </p>
+                                <ul class="space-y-3">
+                                    <li class="flex items-center gap-3">
+                                        <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span class="text-zinc-300">Zero telemetry, zero tracking</span>
+                                    </li>
+                                    <li class="flex items-center gap-3">
+                                        <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span class="text-zinc-300">Built-in firewall and DNS encryption</span>
+                                    </li>
+                                    <li class="flex items-center gap-3">
+                                        <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span class="text-zinc-300">LUKS full-disk encryption</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="glass-card p-8 aspect-video flex items-center justify-center bg-gradient-to-br from-emerald-950/50 to-cyan-950/50">
+                                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.5">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                    <path d="M9 12l2 2 4-4"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Compare Page -->
+        <div id="compare-page" class="page">
+            <section class="pt-32 pb-20">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h1 class="reveal text-4xl sm:text-5xl font-bold mb-6">Aurora OS vs Others</h1>
+                        <p class="reveal reveal-delay-1 text-xl text-zinc-400 max-w-2xl mx-auto">
+                            See how Aurora OS compares to other popular operating systems.
+                        </p>
+                    </div>
+
+                    <div class="reveal overflow-x-auto">
+                        <table class="comparison-table w-full min-w-[800px]">
+                            <thead>
+                                <tr>
+                                    <th class="rounded-tl-xl">Feature</th>
+                                    <th class="text-emerald-400">Aurora OS</th>
+                                    <th>Windows 11</th>
+                                    <th>macOS Sonoma</th>
+                                    <th class="rounded-tr-xl">ChromeOS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="font-medium">License Cost</td>
+                                    <td class="text-emerald-400 font-medium">Free & Open Source</td>
+                                    <td>$139 - $199</td>
+                                    <td>Hardware only ($999+)</td>
+                                    <td>Free - $250+</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium">Source Code</td>
+                                    <td class="text-emerald-400 font-medium">Fully Open</td>
+                                    <td>Closed</td>
+                                    <td>Closed (Darwin partially open)</td>
+                                    <td>Partially Open</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium">Telemetry</td>
+                                    <td class="text-emerald-400 font-medium">None</td>
+                                    <td>Extensive</td>
+                                    <td>Moderate</td>
+                                    <td>Moderate</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium">Minimum RAM</td>
+                                    <td class="text-emerald-400 font-medium">2 GB</td>
+                                    <td>4 GB (8 GB recommended)</td>
+                                    <td>8 GB</td>
+                                    <td>4 GB</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium">Boot Time</td>
+                                    <td class="text-emerald-400 font-medium">~8 seconds</td>
+                                    <td>~20-30 seconds</td>
+                                    <td>~15 seconds</td>
+                                    <td>~8 seconds</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium">Desktop Environment</td>
+                                    <td class="text-emerald-400 font-medium">Aurora DE (Custom)</td>
+                                    <td>Windows Shell</td>
+                                    <td>Aqua</td>
+                                    <td>Chrome OS UI</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium">Package Manager</td>
+                                    <td class="text-emerald-400 font-medium">Aurora Store + Flatpak</td>
+                                    <td>Microsoft Store + Winget</td>
+                                    <td>App Store + Homebrew</td>
+                                    <td>Play Store</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium">Native Linux Apps</td>
+                                    <td class="text-emerald-400 font-medium">Yes (Native)</td>
+                                    <td>WSL (Virtualized)</td>
+                                    <td>No</td>
+                                    <td>Crostini (Container)</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium">Gaming</td>
+                                    <td class="text-emerald-400 font-medium">Steam, Proton, Native</td>
+                                    <td>Native (Best)</td>
+                                    <td>Limited</td>
+                                    <td>Cloud Gaming Only</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium">Development Tools</td>
+                                    <td class="text-emerald-400 font-medium">Pre-installed</td>
+                                    <td>Manual Setup</td>
+                                    <td>Xcode (separate)</td>
+                                    <td>Limited</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium">Updates</td>
+                                    <td class="text-emerald-400 font-medium">Atomic + Rollback</td>
+                                    <td>Forced Updates</td>
+                                    <td>User Controlled</td>
+                                    <td>Automatic</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium">Hardware Support</td>
+                                    <td class="text-emerald-400 font-medium">Broad (x86_64, ARM)</td>
+                                    <td>x86_64 only</td>
+                                    <td>Apple Silicon + Intel</td>
+                                    <td>Chromebooks only</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="reveal mt-16 glass-card p-8">
+                        <h3 class="text-xl font-semibold mb-4">Why Choose Aurora OS?</h3>
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <div>
+                                <h4 class="font-semibold text-emerald-400 mb-2">Freedom</h4>
+                                <p class="text-zinc-400 text-sm">Free as in freedom. Audit the code, modify it, share it. No vendor lock-in.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-emerald-400 mb-2">Performance</h4>
+                                <p class="text-zinc-400 text-sm">Lightweight and efficient. Get more from your hardware, old or new.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-emerald-400 mb-2">Privacy</h4>
+                                <p class="text-zinc-400 text-sm">No tracking, no ads, no data collection. Your computer, your rules.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Download Page -->
+        <div id="download-page" class="page">
+            <section class="pt-32 pb-20">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h1 class="reveal text-4xl sm:text-5xl font-bold mb-6">Download Aurora OS</h1>
+                        <p class="reveal reveal-delay-1 text-xl text-zinc-400 max-w-2xl mx-auto">
+                            Choose your download method and join thousands of users enjoying a better desktop experience.
+                        </p>
+                    </div>
+
+                    <div class="grid lg:grid-cols-2 gap-8 mb-16">
+                        <!-- Direct Download -->
+                        <div class="reveal glass-card p-8">
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-semibold">Direct Download</h3>
+                                    <p class="text-sm text-zinc-500">Recommended for most users</p>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4 mb-6">
+                                <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="font-medium">Aurora OS 3.2.1</span>
+                                        <span class="text-sm text-zinc-500">2.4 GB</span>
+                                    </div>
+                                    <p class="text-sm text-zinc-400 mb-3">Released January 15, 2025</p>
+                                    <a href="#" class="btn-primary w-full text-center block">Download ISO</a>
+                                </div>
+                            </div>
+
+                            <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                                <p class="text-sm text-zinc-500 mb-2">SHA256 Checksum</p>
+                                <code class="text-xs text-zinc-400 break-all">a8f3c21b7d4e8f9a2c5b6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a</code>
+                            </div>
+                        </div>
+
+                        <!-- Alternative Downloads -->
+                        <div class="reveal reveal-delay-1 glass-card p-8">
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-semibold">Alternative Downloads</h3>
+                                    <p class="text-sm text-zinc-500">Mirrors and torrents</p>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-3">
+                                <a href="#" class="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                                    <div>
+                                        <p class="font-medium">Torrent (P2P)</p>
+                                        <p class="text-sm text-zinc-500">Faster for large downloads</p>
+                                    </div>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                        <polyline points="15 3 21 3 21 9"></polyline>
+                                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                                    </svg>
+                                </a>
+                                
+                                <a href="#" class="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                                    <div>
+                                        <p class="font-medium">Mirror 1 (Europe)</p>
+                                        <p class="text-sm text-zinc-500">Hetzner, Germany</p>
+                                    </div>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                        <polyline points="15 3 21 3 21 9"></polyline>
+                                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                                    </svg>
+                                </a>
+                                
+                                <a href="#" class="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                                    <div>
+                                        <p class="font-medium">Mirror 2 (North America)</p>
+                                        <p class="text-sm text-zinc-500">DigitalOcean, NYC</p>
+                                    </div>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                        <polyline points="15 3 21 3 21 9"></polyline>
+                                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                                    </svg>
+                                </a>
+                                
+                                <a href="#" class="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                                    <div>
+                                        <p class="font-medium">Mirror 3 (Asia)</p>
+                                        <p class="text-sm text-zinc-500">Vultr, Tokyo</p>
+                                    </div>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                        <polyline points="15 3 21 3 21 9"></polyline>
+                                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Requirements -->
+                    <div class="reveal glass-card p-8">
+                        <h3 class="text-xl font-semibold mb-6">System Requirements</h3>
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="font-medium text-emerald-400 mb-4">Minimum</h4>
+                                <ul class="space-y-2 text-sm text-zinc-400">
+                                    <li>2 GB RAM</li>
+                                    <li>20 GB storage</li>
+                                    <li>1 GHz processor</li>
+                                    <li>USB or DVD for installation</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-emerald-400 mb-4">Recommended</h4>
+                                <ul class="space-y-2 text-sm text-zinc-400">
+                                    <li>8 GB RAM</li>
+                                    <li>64 GB SSD storage</li>
+                                    <li>Multi-core processor</li>
+                                    <li>USB 3.0 for installation</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Docs Page -->
+        <div id="docs-page" class="page">
+            <section class="pt-32 pb-20">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="docs-layout">
+                        <!-- Sidebar -->
+                        <aside class="lg:w-64 flex-shrink-0 mb-8 lg:mb-0">
+                            <div class="docs-sidebar">
+                                <div class="glass-card p-4 mb-4" style="background: var(--card);">
+                                    <input type="search" placeholder="Search docs..." class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-emerald-500" aria-label="Search documentation">
+                                </div>
+                                <nav class="glass-card p-4" style="background: var(--card);" aria-label="Documentation navigation">
+                                    <p class="text-xs uppercase tracking-wider text-zinc-500 mb-3">Getting Started</p>
+                                    <a href="#" class="docs-link active" data-doc="introduction">Introduction</a>
+                                    <a href="#" class="docs-link" data-doc="installation">Installation</a>
+                                    <a href="#" class="docs-link" data-doc="first-steps">First Steps</a>
+                                    
+                                    <p class="text-xs uppercase tracking-wider text-zinc-500 mb-3 mt-6">User Guide</p>
+                                    <a href="#" class="docs-link" data-doc="desktop">Desktop Environment</a>
+                                    <a href="#" class="docs-link" data-doc="software">Software Management</a>
+                                    <a href="#" class="docs-link" data-doc="settings">System Settings</a>
+                                    
+                                    <p class="text-xs uppercase tracking-wider text-zinc-500 mb-3 mt-6">Advanced</p>
+                                    <a href="#" class="docs-link" data-doc="terminal">Terminal & CLI</a>
+                                    <a href="#" class="docs-link" data-doc="development">Development</a>
+                                    <a href="#" class="docs-link" data-doc="troubleshooting">Troubleshooting</a>
+                                </nav>
+                            </div>
+                        </aside>
+
+                        <!-- Content -->
+                        <article class="flex-1 min-w-0">
+                            <div id="doc-content" class="glass-card p-8 lg:p-12" style="background: var(--card);">
+                                <!-- Breadcrumb Navigation -->
+                                <nav class="breadcrumb" id="breadcrumb" aria-label="Breadcrumb">
+                                    <div class="breadcrumb-item">
+                                        <a href="#" class="breadcrumb-link" onclick="navigateTo('home'); return false;">Home</a>
+                                        <svg class="breadcrumb-separator w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9 18 15 12 9 6"></polyline>
+                                        </svg>
+                                    </div>
+                                    <div class="breadcrumb-item">
+                                        <a href="#" class="breadcrumb-link" onclick="navigateTo('docs'); return false;">Documentation</a>
+                                        <svg class="breadcrumb-separator w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9 18 15 12 9 6"></polyline>
+                                        </svg>
+                                    </div>
+                                    <div class="breadcrumb-item">
+                                        <span class="breadcrumb-current" id="breadcrumb-current">Introduction</span>
+                                    </div>
+                                </nav>
+                                
+                                <!-- Introduction (default) -->
+                                <div id="doc-introduction" class="doc-section">
+                                    <h1 class="text-3xl font-bold mb-6">Introduction to Aurora OS</h1>
+                                    
+                                    <p class="text-zinc-400 mb-6">
+                                        Welcome to Aurora OS, a modern Linux distribution designed for creators, developers, 
+                                        and anyone who values a beautiful, fast, and private computing experience.
+                                    </p>
+
+                                    <h2 class="text-xl font-semibold mt-8 mb-4">What Makes Aurora Different?</h2>
+                                    <p class="text-zinc-400 mb-6">
+                                        Aurora OS is built on three core principles: elegance, performance, and freedom. 
+                                        Unlike many Linux distributions that require extensive configuration, Aurora works 
+                                        beautifully out of the box while remaining fully customizable.
+                                    </p>
+
+                                    <div class="code-block mb-6">
+                                        <code class="text-emerald-400">$ neofetch</code><br>
+                                        <code class="text-zinc-400">                    ....                 user@aurora</code><br>
+                                        <code class="text-zinc-400">                .-:;;;;;;:-.             -----------</code><br>
+                                        <code class="text-zinc-400">             .-;;;;;;   ;;;;;;-.          OS: Aurora OS 3.2.1</code><br>
+                                        <code class="text-zinc-400">           .;;;;;;   .-.   ;;;;;;         Kernel: 6.6.10-aurora</code><br>
+                                        <code class="text-zinc-400">          ;;;;;;   /   \   ;;;;;;        Uptime: 3 hours</code><br>
+                                        <code class="text-zinc-400">         ;;;;;;   |     |   ;;;;;;       Packages: 2048</code><br>
+                                        <code class="text-zinc-400">        ;;;;;;    \___/    ;;;;;;        Shell: zsh 5.9</code><br>
+                                        <code class="text-zinc-400">        ;;;;;;             ;;;;;;        DE: Aurora Desktop</code><br>
+                                        <code class="text-zinc-400">         ;;;;;;    ___    ;;;;;;         Terminal: aurora-term</code><br>
+                                        <code class="text-zinc-400">          ;;;;;;   \ /   ;;;;;;          CPU: Intel i7-12700K</code><br>
+                                        <code class="text-zinc-400">           ';;;;;   "   ;;;;;'           Memory: 4.2G / 32G</code><br>
+                                        <code class="text-zinc-400">             ';;;;;;;;;;;;;'</code><br>
+                                        <code class="text-zinc-400">                '-:::::::-'</code>
+                                    </div>
+
+                                    <h2 class="text-xl font-semibold mt-8 mb-4">Key Features</h2>
+                                    <ul class="space-y-3 text-zinc-400">
+                                        <li class="flex items-start gap-3">
+                                            <svg class="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                            <span><strong class="text-white">Aurora Desktop Environment</strong> - A custom-built DE with smooth animations, intuitive gestures, and a cohesive design language.</span>
+                                        </li>
+                                        <li class="flex items-start gap-3">
+                                            <svg class="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                            <span><strong class="text-white">Aurora Store</strong> - Curated application repository with 50,000+ apps, all verified and sandboxed.</span>
+                                        </li>
+                                        <li class="flex items-start gap-3">
+                                            <svg class="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                            <span><strong class="text-white">Atomic Updates</strong> - Updates are applied atomically with instant rollback capability.</span>
+                                        </li>
+                                        <li class="flex items-start gap-3">
+                                            <svg class="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                            <span><strong class="text-white">Developer Tools</strong> - Pre-configured environments for Python, Node.js, Go, Rust, and more.</span>
+                                        </li>
+                                    </ul>
+
+                                    <div class="mt-8 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+                                        <p class="text-sm text-emerald-300">
+                                            <strong>Tip:</strong> Use the sidebar navigation to explore different sections of the documentation.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Installation -->
+                                <div id="doc-installation" class="doc-section hidden">
+                                    <h1 class="text-3xl font-bold mb-6">Installation Guide</h1>
+                                    
+                                    <p class="text-zinc-400 mb-6">
+                                        Aurora OS can be installed in just a few minutes. Follow this guide to get up and running.
+                                    </p>
+
+                                    <h2 class="text-xl font-semibold mt-8 mb-4">Step 1: Download the ISO</h2>
+                                    <p class="text-zinc-400 mb-4">
+                                        Download the latest Aurora OS ISO from our download page. The file is approximately 2.4 GB.
+                                    </p>
+
+                                    <h2 class="text-xl font-semibold mt-8 mb-4">Step 2: Create Bootable Media</h2>
+                                    <p class="text-zinc-400 mb-4">
+                                        Use one of the following tools to create a bootable USB drive:
+                                    </p>
+                                    <ul class="list-disc list-inside text-zinc-400 mb-6 space-y-2">
+                                        <li><strong>Etherballoon (Windows)</strong> - Recommended for Windows users</li>
+                                        <li><strong>balenaEtcher (macOS/Linux/Windows)</strong> - Cross-platform solution</li>
+                                        <li><strong>dd (Linux/macOS)</strong> - Command-line option</li>
+                                    </ul>
+
+                                    <div class="code-block mb-6">
+                                        <code class="text-zinc-500"># Linux/macOS dd command</code><br>
+                                        <code class="text-emerald-400">sudo dd if=aurora-os-3.2.1.iso of=/dev/sdX bs=4M status=progress && sync</code>
+                                    </div>
+
+                                    <h2 class="text-xl font-semibold mt-8 mb-4">Step 3: Boot from USB</h2>
+                                    <p class="text-zinc-400 mb-4">
+                                        Insert the USB drive and reboot your computer. Press the appropriate key (usually F12, F2, or Del) 
+                                        to access the boot menu and select your USB drive.
+                                    </p>
+
+                                    <h2 class="text-xl font-semibold mt-8 mb-4">Step 4: Run the Installer</h2>
+                                    <p class="text-zinc-400 mb-4">
+                                        Aurora OS boots into a live environment. Double-click the "Install Aurora OS" icon on the desktop 
+                                        to launch the graphical installer.
+                                    </p>
+
+                                    <div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 mt-6">
+                                        <p class="text-sm text-amber-300">
+                                            <strong>Warning:</strong> Installing an operating system will erase data on the target drive. 
+                                            Always back up important files before proceeding.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- First Steps -->
+                                <div id="doc-first-steps" class="doc-section hidden">
+                                    <h1 class="text-3xl font-bold mb-6">First Steps with Aurora OS</h1>
+                                    
+                                    <p class="text-zinc-400 mb-6">
+                                        Congratulations on installing Aurora OS! Here's how to get started.
+                                    </p>
+
+                                    <h2 class="text-xl font-semibold mt-8 mb-4">Setting Up Your System</h2>
+                                    <p class="text-zinc-400 mb-4">
+                                        After your first boot, you'll be greeted by the Setup Assistant. It will guide you through:
+                                    </p>
+                                    <ul class="list-disc list-inside text-zinc-400 mb-6 space-y-2">
+                                        <li>Creating your user account</li>
+                                        <li>Connecting to Wi-Fi</li>
+                                        <li>Configuring time zone and language</li>
+                                        <li>Optional: Installing additional drivers</li>
+                                    </ul>
+
+                                    <h2 class="text-xl font-semibold mt-8 mb-4">Exploring the Desktop</h2>
+                                    <p class="text-zinc-400 mb-4">
+                                        The Aurora Desktop features a clean, intuitive layout:
+                                    </p>
+                                    <ul class="list-disc list-inside text-zinc-400 mb-6 space-y-2">
+                                        <li><strong>Top Panel</strong> - System indicators, clock, and notifications</li>
+                                        <li><strong>Dock</strong> - Quick access to your favorite applications</li>
+                                        <li><strong>Activities Overview</strong> - Press Super key to see all open windows</li>
+                                    </ul>
+
+                                    <h2 class="text-xl font-semibold mt-8 mb-4">Installing Applications</h2>
+                                    <p class="text-zinc-400 mb-4">
+                                        Open the Aurora Store from the dock to browse and install applications. 
+                                        Popular apps include:
+                                    </p>
+                                    <div class="code-block mb-6">
+                                        <code class="text-zinc-500"># Or use the terminal</code><br>
+                                        <code class="text-emerald-400">aurora install firefox vscode spotify</code>
+                                    </div>
+                                </div>
+
+                                <!-- Desktop -->
+                                <div id="doc-desktop" class="doc-section hidden">
+                                    <h1 class="text-3xl font-bold mb-6">Desktop Environment</h1>
+                                    
+                                    <p class="text-zinc-400 mb-6">
+                                        Aurora Desktop is our custom-built desktop environment, designed for beauty and efficiency.
+                                    </p>
+
+                                    <h2 class="text-xl font-semibold mt-8 mb-4">Keyboard Shortcuts</h2>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-sm">
+                                            <thead>
+                                                <tr class="border-b border-white/10">
+                                                    <th class="text-left py-2 pr-4">Shortcut</th>
+                                                    <th class="text-left py-2">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="text-zinc-400">
+                                                <tr class="border-b border-white/5">
+                                                    <td class="py-2 pr-4"><code class="text-emerald-400">Super</code></td>
+                                                    <td class="py-2">Activities Overview</td>
+                                                </tr>
+                                                <tr class="border-b border-white/5">
+                                                    <td class="py-2 pr-4"><code class="text-emerald-400">Super + D</code></td>
+                                                    <td class="py-2">Show Desktop</td>
+                                                </tr>
+                                                <tr class="border-b border-white/5">
+                                                    <td class="py-2 pr-4"><code class="text-emerald-400">Super + L</code></td>
+                                                    <td class="py-2">Lock Screen</td>
+                                                </tr>
+                                                <tr class="border-b border-white/5">
+                                                    <td class="py-2 pr-4"><code class="text-emerald-400">Super + E</code></td>
+                                                    <td class="py-2">File Manager</td>
+                                                </tr>
+                                                <tr class="border-b border-white/5">
+                                                    <td class="py-2 pr-4"><code class="text-emerald-400">Super + T</code></td>
+                                                    <td class="py-2">Terminal</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="py-2 pr-4"><code class="text-emerald-400">Alt + Tab</code></td>
+                                                    <td class="py-2">Switch Windows</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Software -->
+                                <div id="doc-software" class="doc-section hidden">
+                                    <h1 class="text-3xl font-bold mb-6">Software Management</h1>
+                                    
+                                    <p class="text-zinc-400 mb-6">
+                                        Aurora OS uses Flatpak for application packaging, ensuring apps are sandboxed and secure.
+                                    </p>
+
+                                    <h2 class="text-xl font-semibold mt-8 mb-4">Using Aurora Store</h2>
+                                    <p class="text-zinc-400 mb-4">
+                                        The Aurora Store provides a graphical interface for browsing and installing applications. 
+                                        It automatically handles updates and dependencies.
+                                    </p>
+
+                                    <h2 class="text-xl font-semibold mt-8 mb-4">Command Line</h2>
+                                    <p class="text-zinc-400 mb-4">
+                                        For power users, the <code class="text-emerald-400">aurora</code> command provides full control:
+                                    </p>
+                                    <div class="code-block mb-6">
+                                        <code class="text-zinc-500"># Search for an application</code><br>
+                                        <code class="text-emerald-400">aurora search firefox</code><br><br>
+                                        <code class="text-zinc-500"># Install an application</code><br>
+                                        <code class="text-emerald-400">aurora install firefox</code><br><br>
+                                        <code class="text-zinc-500"># Update all applications</code><br>
+                                        <code class="text-emerald-400">aurora update</code><br><br>
+                                        <code class="text-zinc-500"># Remove an application</code><br>
+                                        <code class="text-emerald-400">aurora remove firefox</code>
+                                    </div>
+                                </div>
+
+                                <!-- Settings -->
+                                <div id="doc-settings" class="doc-section hidden">
+                                    <h1 class="text-3xl font-bold mb-6">System Settings</h1>
+                                    
+                                    <p class="text-zinc-400 mb-6">
+                                        Customize your Aurora OS experience through the System Settings panel.
+                                    </p>
+
+                                    <h2 class="text-xl font-semibold mt-8 mb-4">Appearance</h2>
+                                    <p class="text-zinc-400 mb-4">
+                                        Change themes, icons, fonts, and window styles. Aurora OS supports both light and dark modes 
+                                        with automatic switching based on time of day.
+                                    </p>
+
+                                    <h2 class="text-xl font-semibold mt-8 mb-4">Displays</h2>
+                                    <p class="text-zinc-400 mb-4">
+                                        Configure multi-monitor setups, resolution, and scaling. HiDPI displays are automatically detected 
+                                        and configured.
+                                    </p>
+
+                                    <h2 class="text-xl font-semibold mt-8 mb-4">Privacy & Security</h2>
+                                    <p class="text-zinc-400 mb-4">
+                                        Manage app permissions, firewall settings, and encryption options. By default, Aurora OS 
+                                        blocks all incoming connections and requires explicit permission for app access.
+                                    </p>
+                                </div>
+
+                                <!-- Terminal -->
+                                <div id="doc-terminal" class="doc-section hidden">
+                                    <h1 class="text-3xl font-bold mb-6">Terminal & CLI</h1>
+                                    
+                                    <p class="text-zinc-400 mb-6">
+                                        Aurora Terminal is based on the powerful Zsh shell with Oh My Zsh pre-configured.
+                                    </p>
+
+                                    <h2 class="text-xl font-semibold mt-8 mb-4">Useful Commands</h2>
+                                    <div class="code-block mb-6">
+                                        <code class="text-zinc-500"># System information</code><br>
+                                        <code class="text-emerald-400">neofetch</code><br><br>
+                                        <code class="text-zinc-500"># Update system</code><br>
+                                        <code class="text-emerald-400">aurora update --system</code><br><br>
+                                        <code class="text-zinc-500"># Check disk usage</code><br>
+                                        <code class="text-emerald-400">df -h</code><br><br>
+                                        <code class="text-zinc-500"># View running processes</code><br>
+                                        <code class="text-emerald-400">htop</code>
+                                    </div>
+                                </div>
+
+                                <!-- Development -->
+                                <div id="doc-development" class="doc-section hidden">
+                                    <h1 class="text-3xl font-bold mb-6">Development Setup</h1>
+                                    
+                                    <p class="text-zinc-400 mb-6">
+                                        Aurora OS comes with a complete development environment pre-configured.
+                                    </p>
+
+                                    <h2 class="text-xl font-semibold mt-8 mb-4">Pre-installed Tools</h2>
+                                    <ul class="list-disc list-inside text-zinc-400 mb-6 space-y-2">
+                                        <li>Python 3.12 + pip</li>
+                                        <li>Node.js 20 LTS + npm</li>
+                                        <li>Go 1.21</li>
+                                        <li>Rust + Cargo</li>
+                                        <li>Git + GitHub CLI</li>
+                                        <li>Docker + Docker Compose</li>
+                                        <li>VS Code (optional during setup)</li>
+                                    </ul>
+
+                                    <h2 class="text-xl font-semibold mt-8 mb-4">Quick Start</h2>
+                                    <div class="code-block mb-6">
+                                        <code class="text-zinc-500"># Start a new Python project</code><br>
+                                        <code class="text-emerald-400">python -m venv myproject && source myproject/bin/activate</code><br><br>
+                                        <code class="text-zinc-500"># Start a new Node.js project</code><br>
+                                        <code class="text-emerald-400">npm init -y</code><br><br>
+                                        <code class="text-zinc-500"># Start Docker daemon</code><br>
+                                        <code class="text-emerald-400">sudo systemctl start docker</code>
+                                    </div>
+                                </div>
+
+                                <!-- Troubleshooting -->
+                                <div id="doc-troubleshooting" class="doc-section hidden">
+                                    <h1 class="text-3xl font-bold mb-6">Troubleshooting</h1>
+                                    
+                                    <p class="text-zinc-400 mb-6">
+                                        Common issues and their solutions.
+                                    </p>
+
+                                    <h2 class="text-xl font-semibold mt-8 mb-4">Boot Issues</h2>
+                                    <p class="text-zinc-400 mb-4">
+                                        If Aurora OS fails to boot after an update, use the rollback feature:
+                                    </p>
+                                    <div class="code-block mb-6">
+                                        <code class="text-emerald-400">aurora rollback</code>
+                                    </div>
+
+                                    <h2 class="text-xl font-semibold mt-8 mb-4">Wi-Fi Not Working</h2>
+                                    <p class="text-zinc-400 mb-4">
+                                        Some wireless cards require proprietary drivers. Install them from:
+                                    </p>
+                                    <div class="code-block mb-6">
+                                        <code class="text-emerald-400">aurora install firmware-drivers</code>
+                                    </div>
+
+                                    <h2 class="text-xl font-semibold mt-8 mb-4">Application Won't Start</h2>
+                                    <p class="text-zinc-400 mb-4">
+                                        Try running the application from the terminal to see error messages:
+                                    </p>
+                                    <div class="code-block mb-6">
+                                        <code class="text-emerald-400">flatpak run com.example.App</code>
+                                    </div>
+
+                                    <div class="mt-8 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+                                        <p class="text-sm text-emerald-300">
+                                            <strong>Need more help?</strong> Join our <a href="#community" class="underline">Discord community</a> 
+                                            or check the <a href="#" class="underline">community forums</a>.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative z-10 border-t border-white/10 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-400 flex items-center justify-center">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#0a0a0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 17L12 22L22 17" stroke="#0a0a0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 12L12 17L22 12" stroke="#0a0a0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <span class="text-xl font-semibold">Aurora OS</span>
+                    </div>
+                    <p class="text-sm text-zinc-500">
+                        A beautifully crafted Linux distribution for creators, developers, and dreamers.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold mb-4">Product</h4>
+                    <ul class="space-y-2 text-sm text-zinc-500">
+                        <li><a href="#" class="hover:text-white transition-colors">Features</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Download</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Release Notes</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Roadmap</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2 text-sm text-zinc-500">
+                        <li><a href="#" class="hover:text-white transition-colors">Documentation</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Support</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Contributing</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm text-zinc-500">
+                        <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Terms of Use</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">License (GPL v3)</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-between pt-8 border-t border-white/10">
+                <p class="text-sm text-zinc-500">
+                    &copy; 2025 Aurora OS Project. Licensed under GPL v3.
+                </p>
+                <div class="flex gap-4 mt-4 sm:mt-0">
+                    <a href="#" class="text-zinc-500 hover:text-white transition-colors" aria-label="GitHub">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-zinc-500 hover:text-white transition-colors" aria-label="Discord">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-zinc-500 hover:text-white transition-colors" aria-label="X (Twitter)">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize variables first
+        const progressBar = document.getElementById('progressBar');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeMobileMenuBtn = document.getElementById('closeMobileMenu');
+        const breadcrumbCurrent = document.getElementById('breadcrumb-current');
+        
+        // Document titles for breadcrumb
+        const docTitles = {
+            'introduction': 'Introduction',
+            'installation': 'Installation',
+            'first-steps': 'First Steps',
+            'desktop': 'Desktop Environment',
+            'software': 'Software Management',
+            'settings': 'System Settings',
+            'terminal': 'Terminal & CLI',
+            'development': 'Development',
+            'troubleshooting': 'Troubleshooting'
+        };
+
+        // Navigation
+        function navigateTo(page) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active');
+            });
+            
+            // Show target page
+            const targetPage = document.getElementById(page + '-page');
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+            
+            // Update nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.page === page) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Close mobile menu
+            if (mobileMenu) {
+                mobileMenu.classList.remove('open');
+                mobileMenu.setAttribute('aria-hidden', 'true');
+            }
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Re-run reveal animations
+            setTimeout(() => {
+                document.querySelectorAll('.reveal').forEach(el => {
+                    el.classList.remove('active');
+                });
+                revealElements();
+            }, 100);
+        }
+
+        // Update breadcrumb
+        function updateBreadcrumb(docId) {
+            if (breadcrumbCurrent && docTitles[docId]) {
+                breadcrumbCurrent.textContent = docTitles[docId];
+            }
+        }
+
+        // Nav link click handlers
+        document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                const page = link.dataset.page;
+                if (page) {
+                    navigateTo(page);
+                }
+            });
+        });
+
+        // Mobile menu
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.add('open');
+                mobileMenu.setAttribute('aria-hidden', 'false');
+                mobileMenuBtn.setAttribute('aria-expanded', 'true');
+            });
+        }
+
+        if (closeMobileMenuBtn) {
+            closeMobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                mobileMenu.setAttribute('aria-hidden', 'true');
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
+            });
+        }
+
+        // Docs navigation
+        document.querySelectorAll('.docs-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const docId = link.dataset.doc;
+                
+                // Update active state
+                document.querySelectorAll('.docs-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Show doc section
+                document.querySelectorAll('.doc-section').forEach(section => {
+                    section.classList.add('hidden');
+                });
+                
+                const targetDoc = document.getElementById('doc-' + docId);
+                if (targetDoc) {
+                    targetDoc.classList.remove('hidden');
+                }
+                
+                // Update breadcrumb
+                updateBreadcrumb(docId);
+            });
+        });
+
+        // Scroll reveal
+        function revealElements() {
+            const reveals = document.querySelectorAll('.reveal');
+            const windowHeight = window.innerHeight;
+            
+            reveals.forEach(el => {
+                const elementTop = el.getBoundingClientRect().top;
+                const elementVisible = 100;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    el.classList.add('active');
+                }
+            });
+        }
+
+        // Progress bar
+        function updateProgressBar() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrollTop / docHeight) * 100;
+            
+            if (progressBar) {
+                progressBar.style.width = progress + '%';
+                progressBar.setAttribute('aria-valuenow', Math.round(progress));
+            }
+        }
+
+        // Throttle function
+        function throttle(func, limit) {
+            let inThrottle;
+            return function(...args) {
+                if (!inThrottle) {
+                    func.apply(this, args);
+                    inThrottle = true;
+                    setTimeout(() => inThrottle = false, limit);
+                }
+            };
+        }
+
+        // Event listeners
+        window.addEventListener('scroll', throttle(() => {
+            revealElements();
+            updateProgressBar();
+        }, 16));
+
+        window.addEventListener('resize', throttle(() => {
+            // Check breakpoint
+            if (window.innerWidth >= 768) {
+                if (mobileMenu) {
+                    mobileMenu.classList.remove('open');
+                    mobileMenu.setAttribute('aria-hidden', 'true');
+                }
+            }
+        }, 100));
+
+        // Initial load
+        document.addEventListener('DOMContentLoaded', () => {
+            revealElements();
+            updateProgressBar();
+            
+            // Check for reduced motion preference
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+            if (prefersReducedMotion.matches) {
+                document.querySelectorAll('.reveal').forEach(el => {
+                    el.classList.add('active');
+                });
+            }
+            
+            // Initialize breadcrumb
+            updateBreadcrumb('introduction');
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            // Close mobile menu on Escape
+            if (e.key === 'Escape' && mobileMenu && mobileMenu.classList.contains('open')) {
+                mobileMenu.classList.remove('open');
+                mobileMenu.setAttribute('aria-hidden', 'true');
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.focus();
+                }
+            }
+        });
+
+        // Mouse move parallax for aurora blobs
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', throttle((e) => {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+            if (prefersReducedMotion.matches) return;
+            
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 30;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 30;
+            
+            document.querySelectorAll('.aurora-blob').forEach((blob, index) => {
+                const speed = (index + 1) * 0.5;
+                blob.style.transform = `translate(${mouseX * speed}px, ${mouseY * speed}px)`;
+            });
+        }, 50));
+    </script>
+</body>
+</html>
