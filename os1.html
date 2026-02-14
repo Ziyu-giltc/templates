@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Arcadia OS - A beautifully crafted Linux-based operating system that combines the freedom of open source with the elegance of modern design.">
+  <meta name="keywords" content="Linux, Operating System, Arcadia OS, Open Source, Privacy, Security">
+  <meta name="author" content="Arcadia Systems">
+  <meta property="og:title" content="Arcadia OS - Your Digital Sanctuary">
+  <meta property="og:description" content="A beautifully crafted Linux-based operating system">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Arcadia OS - Your Digital Sanctuary</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Space Grotesk', 'sans-serif'],
+            body: ['DM Sans', 'sans-serif'],
+          },
+          colors: {
+            bg: '#0a0a0b',
+            surface: '#141416',
+            card: '#1a1a1e',
+            border: 'rgba(255,255,255,0.08)',
+            muted: '#71717a',
+            fg: '#fafafa',
+            accent: '#f59e0b',
+            'accent-light': '#fbbf24',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    :root {
+      --bg: #0a0a0b;
+      --surface: #141416;
+      --card: #1a1a1e;
+      --border: rgba(255,255,255,0.08);
+      --muted: #71717a;
+      --fg: #fafafa;
+      --accent: #f59e0b;
+      --accent-light: #fbbf24;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--fg);
+      overflow-x: hidden;
+    }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--muted);
+    }
+    
+    /* Hero Background Animation */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.5;
+      animation: float 20s ease-in-out infinite;
+    }
+    
+    .glow-orb-1 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(245,158,11,0.3) 0%, transparent 70%);
+      top: -200px;
+      right: -100px;
+      animation-delay: 0s;
+    }
+    
+    .glow-orb-2 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(251,191,36,0.2) 0%, transparent 70%);
+      bottom: -100px;
+      left: -50px;
+      animation-delay: -10s;
+    }
+    
+    .glow-orb-3 {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(245,158,11,0.15) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation-delay: -5s;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(30px, -30px) scale(1.05); }
+      50% { transform: translate(-20px, 20px) scale(0.95); }
+      75% { transform: translate(20px, 30px) scale(1.02); }
+    }
+    
+    /* Grid Pattern */
+    .grid-pattern {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 70%);
+    }
+    
+    /* Reveal Animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    @media (prefers-reduced-motion: reduce) {
+      .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+      .glow-orb {
+        animation: none;
+      }
+    }
+    
+    /* Button Styles */
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+      color: #0a0a0b;
+      font-weight: 600;
+      padding: 14px 32px;
+      border-radius: 12px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 0 0 0 rgba(245,158,11,0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 40px -10px rgba(245,158,11,0.4);
+    }
+    
+    .btn-primary:hover::before {
+      opacity: 1;
+    }
+    
+    .btn-primary span {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .btn-primary:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--fg);
+      font-weight: 500;
+      padding: 14px 32px;
+      border-radius: 12px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.15);
+      transform: translateY(-2px);
+    }
+    
+    .btn-secondary:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+    
+    /* Card Styles */
+    .feature-card {
+      background: linear-gradient(135deg, rgba(26,26,30,0.8) 0%, rgba(20,20,22,0.6) 100%);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(245,158,11,0.5), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(245,158,11,0.2);
+      box-shadow: 0 30px 60px -20px rgba(0,0,0,0.5);
+    }
+    
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+    
+    /* Comparison Table */
+    .comparison-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    
+    .comparison-table th,
+    .comparison-table td {
+      padding: 16px 20px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .comparison-table th {
+      font-weight: 600;
+      color: var(--muted);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .comparison-table tr:hover td {
+      background: rgba(255,255,255,0.02);
+    }
+    
+    .comparison-table .highlight-col {
+      background: rgba(245,158,11,0.05);
+    }
+    
+    /* Testimonial Card */
+    .testimonial-card {
+      background: linear-gradient(135deg, rgba(26,26,30,0.6) 0%, rgba(20,20,22,0.4) 100%);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      transition: all 0.4s;
+    }
+    
+    .testimonial-card:hover {
+      border-color: rgba(255,255,255,0.12);
+      transform: translateY(-4px);
+    }
+    
+    /* Pricing Card */
+    .pricing-card {
+      background: linear-gradient(135deg, rgba(26,26,30,0.8) 0%, rgba(20,20,22,0.6) 100%);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px 32px;
+      transition: all 0.4s;
+      position: relative;
+    }
+    
+    .pricing-card.featured {
+      border-color: rgba(245,158,11,0.3);
+      box-shadow: 0 0 60px -20px rgba(245,158,11,0.2);
+    }
+    
+    .pricing-card.featured::before {
+      content: 'Most Popular';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+      color: #0a0a0b;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 16px;
+      border-radius: 20px;
+    }
+    
+    .pricing-card:hover {
+      transform: translateY(-8px);
+    }
+    
+    /* FAQ */
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .faq-button {
+      width: 100%;
+      padding: 20px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: none;
+      border: none;
+      color: var(--fg);
+      font-size: 16px;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    
+    .faq-button:hover {
+      color: var(--accent);
+    }
+    
+    .faq-button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+    
+    .faq-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .faq-content.open {
+      max-height: 200px;
+    }
+    
+    .faq-icon {
+      transition: transform 0.3s;
+    }
+    
+    .faq-button[aria-expanded="true"] .faq-icon {
+      transform: rotate(45deg);
+    }
+    
+    /* Skip Link */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: #0a0a0b;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      z-index: 9999;
+      transition: top 0.3s;
+    }
+    
+    .skip-link:focus {
+      top: 16px;
+    }
+    
+    /* Mobile Menu */
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      background: rgba(10,10,11,0.98);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    
+    .mobile-menu.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    /* Noise texture */
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip Link for A11y -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- Noise Texture Overlay -->
+  <div class="noise" aria-hidden="true"></div>
+  
+  <!-- Navigation -->
+  <header class="fixed top-0 left-0 right-0 z-50" role="banner">
+    <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between" role="navigation" aria-label="Main navigation">
+      <a href="#" class="flex items-center gap-3 group" aria-label="Arcadia OS Home">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-accent-light flex items-center justify-center transition-transform group-hover:scale-105">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0a0a0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+            <path d="M2 12h20"/>
+          </svg>
+        </div>
+        <span class="font-display font-semibold text-xl">Arcadia</span>
+      </a>
+      
+      <!-- Desktop Nav -->
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#features" class="text-muted hover:text-fg transition-colors">Features</a>
+        <a href="#comparison" class="text-muted hover:text-fg transition-colors">Compare</a>
+        <a href="#pricing" class="text-muted hover:text-fg transition-colors">Pricing</a>
+        <a href="#faq" class="text-muted hover:text-fg transition-colors">FAQ</a>
+      </div>
+      
+      <div class="hidden md:flex items-center gap-4">
+        <a href="#" class="text-muted hover:text-fg transition-colors px-4 py-2">Sign In</a>
+        <a href="#" class="btn-primary text-sm"><span>Download Free</span></a>
+      </div>
+      
+      <!-- Mobile Menu Button -->
+      <button 
+        class="md:hidden p-2 text-muted hover:text-fg transition-colors" 
+        aria-label="Open menu"
+        aria-expanded="false"
+        id="menu-toggle"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </nav>
+  </header>
+  
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+    <button class="absolute top-6 right-6 p-2 text-muted hover:text-fg" id="menu-close" aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    <a href="#features" class="text-2xl font-display hover:text-accent transition-colors">Features</a>
+    <a href="#comparison" class="text-2xl font-display hover:text-accent transition-colors">Compare</a>
+    <a href="#pricing" class="text-2xl font-display hover:text-accent transition-colors">Pricing</a>
+    <a href="#faq" class="text-2xl font-display hover:text-accent transition-colors">FAQ</a>
+    <a href="#" class="btn-primary mt-4"><span>Download Free</span></a>
+  </div>
+  
+  <main id="main-content">
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20" aria-labelledby="hero-title">
+      <div class="hero-bg" aria-hidden="true">
+        <div class="glow-orb glow-orb-1"></div>
+        <div class="glow-orb glow-orb-2"></div>
+        <div class="glow-orb glow-orb-3"></div>
+        <div class="grid-pattern"></div>
+      </div>
+      
+      <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
+        <div class="reveal" style="transition-delay: 0.1s">
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-muted mb-8">
+            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+            Version 2.4 Now Available
+          </span>
+        </div>
+        
+        <h1 id="hero-title" class="reveal font-display text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6" style="transition-delay: 0.2s">
+          Your Digital<br>
+          <span class="bg-gradient-to-r from-accent via-accent-light to-accent bg-clip-text text-transparent">Sanctuary</span>
+        </h1>
+        
+        <p class="reveal text-lg sm:text-xl text-muted max-w-2xl mx-auto mb-10" style="transition-delay: 0.3s">
+          A beautifully crafted operating system built on Linux. Experience the perfect blend of privacy, performance, and elegance.
+        </p>
+        
+        <div class="reveal flex flex-col sm:flex-row items-center justify-center gap-4" style="transition-delay: 0.4s">
+          <a href="#" class="btn-primary text-lg"><span>Download for Free</span></a>
+          <a href="#" class="btn-secondary flex items-center gap-2">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+            Watch Demo
+          </a>
+        </div>
+        
+        <div class="reveal mt-16 flex items-center justify-center gap-8 text-sm text-muted" style="transition-delay: 0.5s">
+          <div class="flex items-center gap-2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            Privacy First
+          </div>
+          <div class="flex items-center gap-2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
+            Lightning Fast
+          </div>
+          <div class="flex items-center gap-2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+              <line x1="9" y1="9" x2="9.01" y2="9"/>
+              <line x1="15" y1="9" x2="15.01" y2="9"/>
+            </svg>
+            Delightful UX
+          </div>
+        </div>
+      </div>
+      
+      <!-- Scroll Indicator -->
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-muted">
+          <path d="M12 5v14M5 12l7 7 7-7"/>
+        </svg>
+      </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section id="features" class="py-24 lg:py-32 relative" aria-labelledby="features-title">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 id="features-title" class="reveal font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+            Why Choose Arcadia
+          </h2>
+          <p class="reveal text-muted text-lg max-w-2xl mx-auto" style="transition-delay: 0.1s">
+            Every detail designed with intention. Every feature built for you.
+          </p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <article class="reveal feature-card" style="transition-delay: 0.1s">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 flex items-center justify-center mb-5">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </div>
+            <h3 class="font-display font-semibold text-xl mb-3">Privacy by Design</h3>
+            <p class="text-muted text-sm leading-relaxed">No telemetry, no tracking, no data collection. Your data stays on your machine, always.</p>
+          </article>
+          
+          <article class="reveal feature-card" style="transition-delay: 0.2s">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 flex items-center justify-center mb-5">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+            </div>
+            <h3 class="font-display font-semibold text-xl mb-3">Blazing Performance</h3>
+            <p class="text-muted text-sm leading-relaxed">Boots in 8 seconds. Uses 40% less RAM. Optimized kernels for modern hardware.</p>
+          </article>
+          
+          <article class="reveal feature-card" style="transition-delay: 0.3s">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-sky-500/20 to-blue-500/20 flex items-center justify-center mb-5">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+            <h3 class="font-display font-semibold text-xl mb-3">Seamless Workflow</h3>
+            <p class="text-muted text-sm leading-relaxed">Run Windows apps, Linux tools, and Android apps side by side. No compromises.</p>
+          </article>
+          
+          <article class="reveal feature-card" style="transition-delay: 0.4s">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-500/20 flex items-center justify-center mb-5">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+            </div>
+            <h3 class="font-display font-semibold text-xl mb-3">Full Customization</h3>
+            <p class="text-muted text-sm leading-relaxed">Make it yours. Themes, layouts, workflows — every pixel adjustable to your taste.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Comparison Section -->
+    <section id="comparison" class="py-24 lg:py-32 relative" aria-labelledby="comparison-title">
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-accent/5 to-transparent pointer-events-none" aria-hidden="true"></div>
+      
+      <div class="max-w-7xl mx-auto px-6 relative">
+        <div class="text-center mb-16">
+          <h2 id="comparison-title" class="reveal font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+            How We Compare
+          </h2>
+          <p class="reveal text-muted text-lg max-w-2xl mx-auto" style="transition-delay: 0.1s">
+            See why thousands are making the switch from traditional operating systems.
+          </p>
+        </div>
+        
+        <div class="reveal overflow-x-auto" style="transition-delay: 0.2s">
+          <table class="comparison-table min-w-[800px]">
+            <thead>
+              <tr>
+                <th class="rounded-tl-xl"></th>
+                <th class="text-center">
+                  <div class="flex flex-col items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-accent to-accent-light flex items-center justify-center">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0a0a0b" stroke-width="2.5">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+                      </svg>
+                    </div>
+                    <span class="text-fg">Arcadia</span>
+                  </div>
+                </th>
+                <th class="text-center">
+                  <div class="flex flex-col items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2"/>
+                        <line x1="8" y1="21" x2="16" y2="21"/>
+                        <line x1="12" y1="17" x2="12" y2="21"/>
+                      </svg>
+                    </div>
+                    <span>Windows</span>
+                  </div>
+                </th>
+                <th class="text-center">
+                  <div class="flex flex-col items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-gray-500/20 flex items-center justify-center">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2">
+                        <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2"/>
+                        <path d="M12 2c-2.5 0-4.5 4.5-4.5 10s2 10 4.5 10 4.5-4.5 4.5-10-2-10-4.5-10"/>
+                      </svg>
+                    </div>
+                    <span>macOS</span>
+                  </div>
+                </th>
+                <th class="rounded-tr-xl text-center">
+                  <div class="flex flex-col items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <circle cx="12" cy="12" r="4"/>
+                      </svg>
+                    </div>
+                    <span>ChromeOS</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="font-medium">Privacy (No Telemetry)</td>
+                <td class="text-center highlight-col">
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-500/20">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
+                </td>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-500/20">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </span>
+                </td>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-yellow-500/20">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="3"><circle cx="12" cy="12" r="1"/></svg>
+                  </span>
+                </td>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-500/20">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td class="font-medium">Free & Open Source</td>
+                <td class="text-center highlight-col">
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-500/20">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
+                </td>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-500/20">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </span>
+                </td>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-500/20">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </span>
+                </td>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-yellow-500/20">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="3"><circle cx="12" cy="12" r="1"/></svg>
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td class="font-medium">RAM Usage (Idle)</td>
+                <td class="text-center highlight-col text-accent font-semibold">~600MB</td>
+                <td class="text-center text-muted">~2.5GB</td>
+                <td class="text-center text-muted">~4GB</td>
+                <td class="text-center text-muted">~1.2GB</td>
+              </tr>
+              <tr>
+                <td class="font-medium">Boot Time</td>
+                <td class="text-center highlight-col text-accent font-semibold">~8 sec</td>
+                <td class="text-center text-muted">~25 sec</td>
+                <td class="text-center text-muted">~20 sec</td>
+                <td class="text-center text-muted">~10 sec</td>
+              </tr>
+              <tr>
+                <td class="font-medium">Native Linux Apps</td>
+                <td class="text-center highlight-col">
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-500/20">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
+                </td>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-yellow-500/20">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="3"><circle cx="12" cy="12" r="1"/></svg>
+                  </span>
+                </td>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-yellow-500/20">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="3"><circle cx="12" cy="12" r="1"/></svg>
+                  </span>
+                </td>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-500/20">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td class="font-medium rounded-bl-xl">Gaming Support</td>
+                <td class="text-center highlight-col">
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-500/20">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
+                </td>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-500/20">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
+                </td>
+                <td class="text-center">
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-yellow-500/20">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="3"><circle cx="12" cy="12" r="1"/></svg>
+                  </span>
+                </td>
+                <td class="text-center rounded-br-xl">
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-500/20">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-24 lg:py-32 relative" aria-labelledby="testimonials-title">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 id="testimonials-title" class="reveal font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+            Loved by Developers
+          </h2>
+          <p class="reveal text-muted text-lg max-w-2xl mx-auto" style="transition-delay: 0.1s">
+            Join thousands who have made Arcadia their daily driver.
+          </p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <article class="reveal testimonial-card" style="transition-delay: 0.1s">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center font-semibold text-sm">MK</div>
+              <div>
+                <div class="font-semibold text-sm">Marcus K.</div>
+                <div class="text-muted text-xs">Senior Engineer at Stripe</div>
+              </div>
+            </div>
+            <p class="text-sm text-muted leading-relaxed">"Switched from macOS after 8 years. Arcadia feels like what Linux should have always been — polished, coherent, and genuinely pleasant to use daily."</p>
+            <div class="flex gap-1 mt-4" aria-label="5 star rating">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+          </article>
+          
+          <article class="reveal testimonial-card" style="transition-delay: 0.2s">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center font-semibold text-sm">SL</div>
+              <div>
+                <div class="font-semibold text-sm">Sofia L.</div>
+                <div class="text-muted text-xs">Indie Game Developer</div>
+              </div>
+            </div>
+            <p class="text-sm text-muted leading-relaxed">"The gaming performance is insane. I can run my Unity projects and Steam library without dual-booting. Valve really changed the game, and Arcadia nailed it."</p>
+            <div class="flex gap-1 mt-4" aria-label="5 star rating">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+          </article>
+          
+          <article class="reveal testimonial-card" style="transition-delay: 0.3s">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-violet-400 to-violet-600 flex items-center justify-center font-semibold text-sm">JR</div>
+              <div>
+                <div class="font-semibold text-sm">James R.</div>
+                <div class="text-muted text-xs">CS Student at MIT</div>
+              </div>
+            </div>
+            <p class="text-sm text-muted leading-relaxed">"Finally, a Linux distro I can recommend to my non-tech friends. The installer is dead simple and everything just works out of the box. No more Arch wiki rabbit holes."</p>
+            <div class="flex gap-1 mt-4" aria-label="5 star rating">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+          </article>
+          
+          <article class="reveal testimonial-card" style="transition-delay: 0.4s">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center font-semibold text-sm">AT</div>
+              <div>
+                <div class="font-semibold text-sm">Aisha T.</div>
+                <div class="text-muted text-xs">Privacy Researcher</div>
+              </div>
+            </div>
+            <p class="text-sm text-muted leading-relaxed">"I've audited the codebase. The privacy claims are real — no phoning home, no hidden telemetry. This is what an ethical OS looks like. Should be the default."</p>
+            <div class="flex gap-1 mt-4" aria-label="5 star rating">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+          </article>
+          
+          <article class="reveal testimonial-card" style="transition-delay: 0.5s">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center font-semibold text-sm">DN</div>
+              <div>
+                <div class="font-semibold text-sm">David N.</div>
+                <div class="text-muted text-xs">Freelance Designer</div>
+              </div>
+            </div>
+            <p class="text-sm text-muted leading-relaxed">"As someone who grew up on Adobe tools, I was skeptical. But Arcadia's design tools + Figma support won me over. Plus my battery lasts 3 hours longer now."</p>
+            <div class="flex gap-1 mt-4" aria-label="5 star rating">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+          </article>
+          
+          <article class="reveal testimonial-card" style="transition-delay: 0.6s">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-cyan-600 flex items-center justify-center font-semibold text-sm">LP</div>
+              <div>
+                <div class="font-semibold text-sm">Lisa P.</div>
+                <div class="text-muted text-xs">DevOps at Shopify</div>
+              </div>
+            </div>
+            <p class="text-sm text-muted leading-relaxed">"We rolled out Arcadia to our entire dev team. The Docker and Kubernetes tooling is first-class. Onboarding time dropped from days to hours. Total game changer."</p>
+            <div class="flex gap-1 mt-4" aria-label="5 star rating">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-24 lg:py-32 relative" aria-labelledby="pricing-title">
+      <div class="absolute inset-0 bg-gradient-to-b from-accent/5 via-transparent to-transparent pointer-events-none" aria-hidden="true"></div>
+      
+      <div class="max-w-6xl mx-auto px-6 relative">
+        <div class="text-center mb-16">
+          <h2 id="pricing-title" class="reveal font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+            Simple, Honest Pricing
+          </h2>
+          <p class="reveal text-muted text-lg max-w-2xl mx-auto" style="transition-delay: 0.1s">
+            Core OS is free forever. Premium features for power users and teams.
+          </p>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
+          <div class="reveal pricing-card" style="transition-delay: 0.1s">
+            <div class="text-muted text-sm font-medium mb-2">Community</div>
+            <div class="flex items-baseline gap-1 mb-4">
+              <span class="text-4xl font-display font-bold">Free</span>
+            </div>
+            <p class="text-muted text-sm mb-6">Everything you need to get started</p>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center gap-3 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Full OS with all core features
+              </li>
+              <li class="flex items-center gap-3 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Community forum support
+              </li>
+              <li class="flex items-center gap-3 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Free lifetime updates
+              </li>
+              <li class="flex items-center gap-3 text-sm text-muted">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                Premium apps
+              </li>
+            </ul>
+            <a href="#" class="btn-secondary w-full text-center block">Download Free</a>
+          </div>
+          
+          <div class="reveal pricing-card featured" style="transition-delay: 0.2s">
+            <div class="text-accent text-sm font-medium mb-2">Pro</div>
+            <div class="flex items-baseline gap-1 mb-4">
+              <span class="text-4xl font-display font-bold">$9</span>
+              <span class="text-muted text-sm">/month</span>
+            </div>
+            <p class="text-muted text-sm mb-6">For power users and professionals</p>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center gap-3 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Everything in Community
+              </li>
+              <li class="flex items-center gap-3 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Premium apps included
+              </li>
+              <li class="flex items-center gap-3 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Priority email support
+              </li>
+              <li class="flex items-center gap-3 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Cloud backup & sync
+              </li>
+            </ul>
+            <a href="#" class="btn-primary w-full text-center block"><span>Get Started</span></a>
+          </div>
+          
+          <div class="reveal pricing-card" style="transition-delay: 0.3s">
+            <div class="text-muted text-sm font-medium mb-2">Enterprise</div>
+            <div class="flex items-baseline gap-1 mb-4">
+              <span class="text-4xl font-display font-bold">Custom</span>
+            </div>
+            <p class="text-muted text-sm mb-6">For teams and organizations</p>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center gap-3 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Everything in Pro
+              </li>
+              <li class="flex items-center gap-3 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                MDM & fleet management
+              </li>
+              <li class="flex items-center gap-3 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Dedicated account manager
+              </li>
+              <li class="flex items-center gap-3 text-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                SLA & 24/7 support
+              </li>
+            </ul>
+            <a href="#" class="btn-secondary w-full text-center block">Contact Sales</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- FAQ Section -->
+    <section id="faq" class="py-24 lg:py-32 relative" aria-labelledby="faq-title">
+      <div class="max-w-3xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 id="faq-title" class="reveal font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+            Common Questions
+          </h2>
+          <p class="reveal text-muted text-lg" style="transition-delay: 0.1s">
+            Everything you need to know before making the switch.
+          </p>
+        </div>
+        
+        <div class="reveal" style="transition-delay: 0.2s">
+          <div class="faq-item">
+            <button class="faq-button" aria-expanded="false">
+              <span>Can I run Windows apps on Arcadia?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+            <div class="faq-content">
+              <p class="text-muted text-sm pb-5">Yes! Arcadia includes Wine and Proton pre-configured, allowing you to run thousands of Windows applications seamlessly. Steam games work out of the box, and productivity apps like Microsoft Office run great via CrossOver (included in Pro).</p>
+            </div>
+          </div>
+          
+          <div class="faq-item">
+            <button class="faq-button" aria-expanded="false">
+              <span>Will my hardware be compatible?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+            <div class="faq-content">
+              <p class="text-muted text-sm pb-5">Arcadia supports most hardware from the last 10 years. We include drivers for NVIDIA, AMD, and Intel graphics out of the box. Wi-Fi, Bluetooth, and audio work automatically on 95% of laptops. Check our hardware compatibility list for details.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item">
+            <button class="faq-button" aria-expanded="false">
+              <span>How do I install Arcadia?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+            <div class="faq-content">
+              <p class="text-muted text-sm pb-5">Download the ISO, flash it to a USB drive, and boot from it. The graphical installer guides you through partitioning, user setup, and installation in about 15 minutes. You can also try it live from USB before installing.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item">
+            <button class="faq-button" aria-expanded="false">
+              <span>Is Arcadia really private?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+            <div class="faq-content">
+              <p class="text-muted text-sm pb-5">Absolutely. We don't collect any telemetry or user data. The code is open source and auditable. Updates come directly from our servers with no tracking. You can verify this yourself by inspecting network traffic or reading our source code.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item">
+            <button class="faq-button" aria-expanded="false">
+              <span>Can I dual-boot with Windows?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+            <div class="faq-content">
+              <p class="text-muted text-sm pb-5">Yes, our installer includes a guided dual-boot setup that automatically detects Windows and creates the appropriate partitions. You'll get a boot menu on startup to choose between Arcadia and Windows. We also support full disk encryption for both.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="py-24 lg:py-32 relative" aria-labelledby="cta-title">
+      <div class="max-w-4xl mx-auto px-6 text-center">
+        <div class="reveal relative rounded-3xl overflow-hidden p-12 lg:p-16" style="background: linear-gradient(135deg, rgba(26,26,30,0.9) 0%, rgba(20,20,22,0.7) 100%); border: 1px solid var(--border);">
+          <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
+            <div class="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-accent/20 filter blur-3xl"></div>
+            <div class="absolute -bottom-24 -left-24 w-64 h-64 rounded-full bg-accent-light/10 filter blur-3xl"></div>
+          </div>
+          
+          <div class="relative">
+            <h2 id="cta-title" class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+              Ready to Switch?
+            </h2>
+            <p class="text-muted text-lg max-w-xl mx-auto mb-8">
+              Join 250,000+ users who've found their digital sanctuary. Download takes 2 minutes.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a href="#" class="btn-primary text-lg"><span>Download Arcadia Free</span></a>
+              <a href="#" class="text-muted hover:text-fg transition-colors flex items-center gap-2">
+                View Documentation
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                  <polyline points="12 5 19 12 12 19"/>
+                </svg>
+              </a>
+            </div>
+            
+            <div class="flex items-center justify-center gap-6 mt-10 text-sm text-muted">
+              <div class="flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                No account required
+              </div>
+              <div class="flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                2GB download
+              </div>
+              <div class="flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                SHA256 verified
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <!-- Footer -->
+  <footer class="py-16 border-t border-border" role="contentinfo">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
+        <div class="col-span-2 lg:col-span-1">
+          <a href="#" class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-accent-light flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0a0a0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+                <path d="M2 12h20"/>
+              </svg>
+            </div>
+            <span class="font-display font-semibold text-xl">Arcadia</span>
+          </a>
+          <p class="text-muted text-sm">Your digital sanctuary. Open, private, beautiful.</p>
+        </div>
+        
+        <nav aria-label="Product links">
+          <div class="font-semibold text-sm mb-4">Product</div>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-muted hover:text-fg transition-colors text-sm">Features</a></li>
+            <li><a href="#" class="text-muted hover:text-fg transition-colors text-sm">Download</a></li>
+            <li><a href="#" class="text-muted hover:text-fg transition-colors text-sm">Changelog</a></li>
+            <li><a href="#" class="text-muted hover:text-fg transition-colors text-sm">Roadmap</a></li>
+          </ul>
+        </nav>
+        
+        <nav aria-label="Resources links">
+          <div class="font-semibold text-sm mb-4">Resources</div>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-muted hover:text-fg transition-colors text-sm">Documentation</a></li>
+            <li><a href="#" class="text-muted hover:text-fg transition-colors text-sm">Community</a></li>
+            <li><a href="#" class="text-muted hover:text-fg transition-colors text-sm">Blog</a></li>
+            <li><a href="#" class="text-muted hover:text-fg transition-colors text-sm">Hardware List</a></li>
+          </ul>
+        </nav>
+        
+        <nav aria-label="Company links">
+          <div class="font-semibold text-sm mb-4">Company</div>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-muted hover:text-fg transition-colors text-sm">About</a></li>
+            <li><a href="#" class="text-muted hover:text-fg transition-colors text-sm">Careers</a></li>
+            <li><a href="#" class="text-muted hover:text-fg transition-colors text-sm">Press</a></li>
+            <li><a href="#" class="text-muted hover:text-fg transition-colors text-sm">Contact</a></li>
+          </ul>
+        </nav>
+        
+        <nav aria-label="Legal links">
+          <div class="font-semibold text-sm mb-4">Legal</div>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-muted hover:text-fg transition-colors text-sm">Privacy</a></li>
+            <li><a href="#" class="text-muted hover:text-fg transition-colors text-sm">Terms</a></li>
+            <li><a href="#" class="text-muted hover:text-fg transition-colors text-sm">License (GPL)</a></li>
+          </ul>
+        </nav>
+      </div>
+      
+      <div class="flex flex-col sm:flex-row items-center justify-between pt-8 border-t border-border">
+        <p class="text-muted text-sm">2024 Arcadia Systems. Open source under GPL v3.</p>
+        <div class="flex items-center gap-4 mt-4 sm:mt-0">
+          <a href="#" class="text-muted hover:text-fg transition-colors" aria-label="GitHub">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+          </a>
+          <a href="#" class="text-muted hover:text-fg transition-colors" aria-label="Twitter">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+          </a>
+          <a href="#" class="text-muted hover:text-fg transition-colors" aria-label="Discord">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189z"/>
+            </svg>
+          </a>
+          <a href="#" class="text-muted hover:text-fg transition-colors" aria-label="Mastodon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M23.268 5.313c-.35-2.578-2.617-4.61-5.304-5.004C17.51.242 15.792 0 11.813 0h-.03c-3.98 0-4.835.242-5.288.309C3.882.692 1.496 2.518.917 5.127.64 6.412.61 7.837.661 9.143c.074 1.874.088 3.745.26 5.611.118 1.24.325 2.47.62 3.68.55 2.237 2.777 4.098 4.96 4.857 2.336.792 4.849.923 7.256.38.265-.061.527-.132.786-.213.585-.184 1.27-.39 1.774-.753a.057.057 0 00.023-.043v-1.809a.052.052 0 00-.02-.041.053.053 0 00-.046-.01 20.282 20.282 0 01-4.709.545c-2.73 0-3.463-1.284-3.674-1.818a5.593 5.593 0 01-.319-1.433.053.053 0 01.066-.054c1.517.363 3.072.546 4.632.546.376 0 .75 0 1.125-.01 1.57-.044 3.224-.124 4.768-.422.038-.008.077-.015.11-.024 2.435-.464 4.753-1.92 4.989-5.604.008-.145.03-1.52.03-1.67.002-.512.167-3.63-.024-5.545zm-3.748 9.195h-2.561V8.29c0-1.309-.55-1.976-1.67-1.976-1.23 0-1.846.79-1.846 2.35v3.403h-2.546V8.663c0-1.56-.617-2.35-1.848-2.35-1.112 0-1.668.668-1.67 1.977v6.218H4.822V8.102c0-1.31.337-2.35 1.011-3.12.696-.77 1.608-1.164 2.74-1.164 1.311 0 2.302.5 2.962 1.498l.638 1.06.638-1.06c.66-.999 1.65-1.498 2.96-1.498 1.13 0 2.043.395 2.74 1.164.675.77 1.012 1.81 1.012 3.12z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+  <script>
+    // Initialize variables first
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuClose = document.getElementById('menu-close');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+    
+    // Mobile Menu Toggle
+    function openMobileMenu() {
+      mobileMenu.classList.add('open');
+      mobileMenu.setAttribute('aria-hidden', 'false');
+      menuToggle.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeMobileMenu() {
+      mobileMenu.classList.remove('open');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+    
+    menuToggle.addEventListener('click', openMobileMenu);
+    menuClose.addEventListener('click', closeMobileMenu);
+    mobileMenuLinks.forEach(link => {
+      link.addEventListener('click', closeMobileMenu);
+    });
+    
+    // Escape key closes menu
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+        closeMobileMenu();
+      }
+    });
+    
+    // Scroll Reveal with IntersectionObserver
+    const revealElements = document.querySelectorAll('.reveal');
+    
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    if (!prefersReducedMotion) {
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      });
+      
+      revealElements.forEach(el => revealObserver.observe(el));
+    } else {
+      // If reduced motion, show all elements immediately
+      revealElements.forEach(el => el.classList.add('visible'));
+    }
+    
+    // FAQ Accordion
+    const faqButtons = document.querySelectorAll('.faq-button');
+    
+    faqButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const expanded = button.getAttribute('aria-expanded') === 'true';
+        const content = button.nextElementSibling;
+        
+        // Close all other FAQs
+        faqButtons.forEach(otherButton => {
+          if (otherButton !== button) {
+            otherButton.setAttribute('aria-expanded', 'false');
+            otherButton.nextElementSibling.classList.remove('open');
+          }
+        });
+        
+        // Toggle current FAQ
+        button.setAttribute('aria-expanded', !expanded);
+        content.classList.toggle('open');
+      });
+      
+      // Keyboard navigation
+      button.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          button.click();
+        }
+      });
+    });
+    
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href !== '#') {
+          e.preventDefault();
+          const target = document.querySelector(href);
+          if (target) {
+            target.scrollIntoView({
+              behavior: prefersReducedMotion ? 'auto' : 'smooth',
+              block: 'start'
+            });
+          }
+        }
+      });
+    });
+    
+    // Header background on scroll
+    const header = document.querySelector('header');
+    let lastScroll = 0;
+    
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      
+      if (currentScroll > 50) {
+        header.style.background = 'rgba(10, 10, 11, 0.9)';
+        header.style.backdropFilter = 'blur(12px)';
+      } else {
+        header.style.background = 'transparent';
+        header.style.backdropFilter = 'none';
+      }
+      
+      lastScroll = currentScroll;
+    }, { passive: true });
+  </script>
+</body>
+</html>
